@@ -1,0 +1,69 @@
+# CANTI — archivo de cantos de la app
+#
+# Para añadir un canto: en GitHub toca el lápiz ✎ (Edit), escribe el canto
+# AL FINAL de este archivo y pulsa «Commit changes». En 1-2 minutos aparece en la app.
+#
+# Cada canto empieza con una línea así:
+#   === Título original | título en árabe | sección | idioma
+#
+#   sección:  arabo · italiano · altre
+#   idioma (opcional): arabo, italiano, latino, spagnolo, francese, inglese
+#   El título en árabe se puede dejar vacío:  === Bella ciao | | italiano
+#
+# Debajo va el texto:
+#   - una línea vacía = estrofa nueva
+#   - «>» al principio de la línea = estribillo
+#   - acordes entre corchetes antes de la sílaba: [Do]Ya [Sol]rab
+#
+# Opcional, después del texto:
+#   --- pronuncia      (la pronunciación escrita en letras árabes)
+#   --- spiegazione    (una explicación o traducción en árabe)
+#
+# Las líneas que empiezan con # (aquí arriba) no se muestran.
+# Ejemplo (borra el # de cada línea para probarlo):
+#
+# === Esempio | مثال | italiano
+# Prima riga della strofa,
+# seconda riga.
+#
+# > Ritornello che si ripete.
+#
+# --- spiegazione
+# شرح قصير بالعربية.
+Oración del remanso
+Canción de Jorge Fandermole ‧ 2002
+
+Soy de la orilla brava del agua turbia y la correntada
+Que baja hermosa por su barrosa profundidad
+Soy un paisano serio, soy gente del remanso Valerio
+Que es donde el cielo remonta el vuelo en el Paraná
+Tengo el color del río y su misma voz en mi canto sigo
+El agua mansa y su suave danza en el corazón
+Pero a veces oscura va turbulenta en la ciega hondura
+Y se hace brillo en este cuchillo de pescador
+Cristo de las redes
+No nos abandones
+Y en los espineles
+Déjanos tus dones
+No pienses que nos perdiste, es que la pobreza nos pone tristes
+La sangre tensa y uno no piensa más que en morir
+Agua del río viejo, llévate pronto este canto lejos
+Que está aclarando y vamos pescando para vivir
+Llevo mi sombra alerta sobre la escama del agua abierta
+Y en el reposo vertiginoso del espinel
+Sueño que alzo la proa y subo a la luna en la canoa
+Y allí descanso, hecha un remanso mi propia piel
+Calma de mis dolores, ay, Cristo de los pescadores
+Dile a mi amada que está apenada esperándome
+Que ando pensando en ella mientras voy vadeando las estrellas
+Que el río está bravo y estoy cansado para volver
+Cristo de las redes
+No nos abandones
+Y en los espineles
+Déjanos tus dones
+No pienses que nos perdiste, es que la pobreza nos pone tristes
+La sangre tensa y uno no piensa más que en morir
+Agua del río viejo, llévate pronto este canto lejos
+Que está aclarando y vamos pescando para vivir
+Agua del río viejo, llévate pronto este canto lejos
+Que está aclarando y vamos pescando para vivir
