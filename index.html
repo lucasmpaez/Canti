@@ -237,7 +237,7 @@ function subOf(s){if(SUB[s.sec])return s.sec;if(s.sec==="arabi-gen"||s.lang==="a
 function nm(o){return o.ar+" · "+o.it}
 function bi(ar,it,cls=""){return `<span class="bi ${cls}"><span class="bar" dir="rtl">${esc(ar)}</span>${it&&it!==ar?`<span class="bit" dir="auto">${esc(it)}</span>`:""}</span>`}
 function biSub(o){return bi(o.ar,o.it)}
-function biTitle(s){return s.title_ar?bi(s.title_ar,s.title):`<span class="bi"><span class="bit1" dir="auto">${esc(s.title)}</span></span>`}
+function biTitle(s){return s.title_ar?bi(s.title_ar,s.title):`<span class="bi"><span class="bit" dir="auto">${esc(s.title)}</span></span>`}
 
 const T = {
  ar:{brand:"ترانيم",search:"ابحث عن ترنيمة أو كلمة…",all:"الكل",fav:"المفضلة",mine:"أضفتها أنا",
