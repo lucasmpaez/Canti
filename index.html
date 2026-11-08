@@ -377,7 +377,8 @@ function renderChips(){
   $("#chips").innerHTML=opts.map(([k,l])=>`<button class="chip${S.filter===k?" on":""}" data-f="${esc(k)}">${esc(l)}</button>`).join("");
 }
 function songRows(arr){
-  arr.sort((a,b)=>(a.order??1e9)-(b.order??1e9)||a.title.localeCompare(b.title));
+  const k=x=>String(x.title||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/^[^A-Za-z0-9\u0600-\u06ff]+/,"").toLowerCase();
+  arr.sort((a,b)=>k(a).localeCompare(k(b),"it"));
   return `<div class="list">`+arr.map(s=>
       `<div class="item" data-id="${esc(s.id)}"><span class="t">${biTitle(s)}</span>`+
       (s.src==="local"?`<span class="tag">${S.lang==="ar"?"محلي":"locale"}</span>`:"")+
