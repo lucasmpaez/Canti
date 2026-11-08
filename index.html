@@ -134,6 +134,34 @@ html[dir=rtl] .pv.myst .i{margin-top:2px}
 .tref.open{border-radius:8px 8px 0 0;margin-bottom:0}
 .inc.exp{margin-top:0;border-radius:0 0 8px 8px;padding-top:2px}
 .expc{cursor:pointer;text-align:center;color:var(--accent);font-size:.8em;padding:8px 0 10px;border-top:1px solid var(--line)}
+
+/* ---------- Inni ---------- */
+.ihint{font-family:Lora,serif;font-size:12.5px;color:var(--muted);direction:ltr}
+.ihour{font-family:Lora,serif;font-size:12px;font-weight:600;color:var(--red);text-transform:uppercase;letter-spacing:.05em}
+.item .p{font-family:Lora,serif;font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.today{background:var(--chip);border-radius:14px;padding:12px 14px;margin:6px 0 14px}
+.today .lab{display:flex;justify-content:space-between;font-size:12px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.06em;font-family:Lora,serif;margin-bottom:4px;direction:ltr}
+.today .lab .tar{font-family:"Noto Naskh Arabic",serif;text-transform:none;letter-spacing:0;font-size:14px}
+.today .trow{display:flex;align-items:center;gap:10px;padding:7px 0;border-top:1px solid var(--line);cursor:pointer;direction:ltr}
+.today .trow:first-of-type{border-top:none}
+.today .o{width:86px;flex:none;font-family:Lora,serif;font-size:13px;color:var(--muted);line-height:1.2}.today .oa{font-family:"Noto Naskh Arabic",serif;font-size:12px}
+.today .tt{flex:1;font-family:Lora,serif;font-size:17px}
+.ifoot{text-align:center;color:var(--muted);font-size:13px;margin-top:24px;line-height:1.7;font-family:Lora,serif}.ifoot a{color:var(--accent)}
+.inno{text-align:left}.inno .isub{font-family:Lora,serif;font-size:12.5px;color:var(--red);font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin-top:14px}
+.inno h1.ititle{font-family:Lora,serif;margin-top:2px}.inno .meta{font-family:Lora,serif}
+.itext{font-family:Lora,serif;font-size:var(--fs);line-height:1.5;direction:ltr;text-align:left}
+.blk{display:flex;gap:10px;margin:0 0 .9em}
+.blk .n{width:1.6em;flex:none;text-align:right;color:var(--accent);font-size:.8em;padding-top:.15em;font-weight:600}
+.blk .ls{flex:1;min-width:0}.blk .l{padding-left:1.2em;text-indent:-1.2em}.blk.prose .l{padding-left:0;text-indent:0}
+.l.it{font-style:italic}.l.rub{color:var(--red);font-style:italic;text-align:center}
+.blk.trad{color:var(--muted)}.blk.ant{background:var(--chip);border-radius:12px;padding:10px 12px 10px 0}
+.mk{color:var(--red);font-size:.85em;margin-right:.35em}
+.h3{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:1.6em 0 .7em}
+.ipages img{display:block;width:100%;height:auto;background:#fff;border-radius:6px;margin:12px 0;box-shadow:0 1px 4px rgba(0,0,0,.12)}
+.dark .ipages img{filter:invert(.9) hue-rotate(180deg)}
+.inav{display:flex;gap:10px;margin-top:26px}.inav>*{flex:1;min-width:0}
+.ib2n{cursor:pointer;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 14px;font-family:Lora,serif}
+.ib2n.nx{text-align:right}.ib2n .k{font-size:12px;color:var(--muted)}.ib2n .v{font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 /* ---------- tema blu (logo) ---------- */
 .tomenu{display:block;width:100%;margin:26px 0 10px;padding:14px;border:none;border-radius:14px;cursor:pointer;font-size:16px;font-weight:600;color:#fff;background:linear-gradient(135deg,#0d47a1,#0a2a63);box-shadow:0 3px 10px rgba(10,42,99,.25)}
 :root{--bg:#f1f5fc;--card:#fff;--ink:#12203d;--muted:#5a6683;--line:#d8e1f0;--accent:#0d47a1;--chip:#e2eaf8;--chord:#c62828;--red:#d32f2f;--navy:#0a2a63;--navy2:#0d47a1}
@@ -219,7 +247,7 @@ function renderPrayer(p){
   if(p.note)h+=`<div class="pnote">${esc(p.note)}</div>`;
   $("#main").innerHTML=h+prLines(p.lines)+`<button class="tomenu" data-menu="1"><span dir="rtl">العودة إلى القائمة</span> · <span dir="ltr">Torna al menù</span></button>`+"</div>"; window.scrollTo(0,0);
 }
-function prayerRows(list,bar){return `<div class="list prl">`+list.map(p=>`<div class="item pr" data-id="${esc(p.id)}"><span class="t">${bi(p.ar,p.it)}<span class="ptr">${trH(p.tr)}</span></span><span class="chev">›</span></div>`).join("")+(bar?`<div class="item prbar" data-pl="1"><span class="ic">✠</span><span class="t">${bi("صَلَوَات","Preghiere")}</span><span class="count">${PRAYERS.length-1}</span><span class="chev">›</span></div>`:"")+`</div>`}
+function prayerRows(list,bar){return `<div class="list prl">`+list.map(p=>`<div class="item pr" data-id="${esc(p.id)}"><span class="t">${bi(p.ar,p.it)}<span class="ptr">${trH(p.tr)}</span></span><span class="chev">›</span></div>`).join("")+(bar?`<div class="item prbar" data-pl="1"><span class="ic">✠</span><span class="t">${bi("صَلَوَات","Preghiere")}</span><span class="count">${PRAYERS.length-1}</span><span class="chev">›</span></div>`+(INNI?`<div class="item prbar" data-go="inni"><span class="ic">♪</span><span class="t">${bi("أَنَاشِيد","Inni")}</span><span class="count">${INNI.length}</span><span class="chev">›</span></div>`:""):"")+`</div>`}
 function renderPrayerList(){
   let h=`<div class="sectitle"><h1>${bi("صَلَوَات","Preghiere")}</h1></div>`;
   for(const [g,it,ar] of PGRP){const ps=PRAYERS.filter(p=>p.grp===g);if(!ps.length)continue;
@@ -316,6 +344,102 @@ function parseCanti(txt){
   return out.map(s=>({...s,body:s.body.trim(),translit_ar:s.translit_ar.trim(),note_ar:s.note_ar.trim()})).filter(s=>s.body);
 }
 if(HOSTED){fetch("canti.txt",{cache:"no-cache"}).then(r=>r.ok?r.text():"").then(t=>{fileSongs=parseCanti(t);if(fileSongs.length)render()}).catch(()=>{})}
+
+/* ---------- Inni (dal libretto «Inni»: dati in inni/inni.json, spartiti in inni/img) ---------- */
+let INNI=null, IBY={}, lastInni="inni";
+const INNI_SKIP=new Set(["c36","c37"]); // Angelus e Regina caeli: già tra le preghiere
+const GIORNI_L=["DOMENICA","LUNEDÌ","MARTEDÌ","MERCOLEDÌ","GIOVEDÌ","VENERDÌ","SABATO"];
+const GIORNI_AR={DOMENICA:"الأحد","LUNEDÌ":"الاثنين","MARTEDÌ":"الثلاثاء","MERCOLEDÌ":"الأربعاء","GIOVEDÌ":"الخميس","VENERDÌ":"الجمعة",SABATO:"السبت"};
+const capI=x=>x.charAt(0)+x.slice(1).toLowerCase();
+const slugI=x=>x.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
+function pasquaI(y){const a=y%19,b=Math.floor(y/100),c=y%100,d=Math.floor(b/4),e=b%4,f=Math.floor((b+8)/25),g=Math.floor((b-f+1)/3),
+  h=(19*a+b-d-g+15)%30,i=Math.floor(c/4),k=c%4,l=(32+2*e+2*i-h-k)%7,m=Math.floor((a+11*h+22*l)/451),
+  mo=Math.floor((h+l-7*m+114)/31),da=((h+l-7*m+114)%31)+1;return new Date(y,mo-1,da)}
+function tempoPasq(d){const t=new Date(d.getFullYear(),d.getMonth(),d.getDate()),p=pasquaI(d.getFullYear());const x=(t-p)/864e5;return x>=0&&x<=49}
+function prepInni(arr){
+  arr=arr.filter(c=>!INNI_SKIP.has(c.id));
+  arr.forEach(c=>{
+    if(c.sec==="Inni del tempo ordinario")c.sec="Inni durante l'anno";
+    else if(c.sec==="Inni di altri tempi liturgici"){const t={AVVENTO:"Avvento",NATALE:"Natale",QUARESIMA:"Quaresima",PASQUA:"Pasqua"}[c.name];if(t){c.sec="Inni di "+t;c.sub=c.ora}}
+    if(GIORNI_L.includes(c.name))c.hour=capI(c.name)+" · "+c.ora;
+    else if(c.name==="ORA MEDIA")c.hour="Ora media";
+    else if(c.name==="COMPIETA"&&c.sec!=="Preghiere")c.hour="Compieta";
+    else if(c.name==="OMNI DIE")c.hour="Ora media del sabato";
+    else if(c.name==="O SPES MEA CARA")c.hour="Compieta del sabato";
+    else if(c.ora&&c.sec!=="Preghiere")c.hour=c.ora;
+    c._t=[c.title,c.sub||"",...c.blocks.flatMap(b=>(b.lines||[]).map(l=>l.t))].join("\n");c._n=norm(c._t);
+  });
+  INNI=arr;IBY={};arr.forEach(c=>IBY[c.id]=c);
+}
+const fcI=f=>INNI.find(f);
+const IMENU={};
+function buildIMenu(){
+  IMENU.anno={title:"Inni durante l'anno",ar:"أناشيد خلال السنة",hint:"Scegli il giorno",parent:"",
+    items:()=>[...GIORNI_L.slice(1),GIORNI_L[0]].map(g=>[capI(g)+" · "+GIORNI_AR[g],"Lodi e Vespri","inni-"+slugI(g)])
+      .concat([["Ora media",fcI(c=>c.name==="ORA MEDIA").title,"i-"+fcI(c=>c.name==="ORA MEDIA").id],
+               ["Compieta",fcI(c=>c.name==="COMPIETA"&&c.sec!=="Preghiere").title,"i-"+fcI(c=>c.name==="COMPIETA"&&c.sec!=="Preghiere").id]])};
+  for(const g of GIORNI_L){
+    IMENU[slugI(g)]={title:capI(g),ar:GIORNI_AR[g],parent:"anno",items:()=>{
+      const r=INNI.filter(c=>c.name===g).map(c=>[c.ora,c.title,"i-"+c.id]);
+      if(g==="SABATO"){const o=fcI(c=>c.name==="OMNI DIE"),p=fcI(c=>c.name==="O SPES MEA CARA");if(o)r.splice(1,0,["Ora media",o.title,"i-"+o.id]);if(p)r.push(["Compieta",p.title,"i-"+p.id])}
+      return r}};
+  }
+  for(const [k,n,lab,ar] of [["avvento","AVVENTO","Avvento","المجيء"],["natale","NATALE","Natale","الميلاد"],["quaresima","QUARESIMA","Quaresima","الصوم الكبير"],["pasqua","PASQUA","Pasqua","الفصح"]])
+    IMENU[k]={title:"Inni di "+lab,ar:"أناشيد زمن "+ar,hint:"Lodi e Vespri",parent:"",items:()=>INNI.filter(c=>c.name===n).map(c=>[c.ora,c.title,"i-"+c.id])};
+  IMENU.cantici={title:"Cantici e altri inni",ar:"تسابيح وأناشيد أخرى",hint:"Benedictus, Magnificat…",parent:"",items:()=>INNI.filter(c=>c.sec==="Cantici e altri inni").map(c=>[c.title,"","i-"+c.id])};
+  IMENU.appendice={title:"Appendice",ar:"ملحق",hint:"Altri inni di Lodi e Vespri",parent:"",items:()=>INNI.filter(c=>c.sec==="Appendice").map(c=>[c.ora,c.title,"i-"+c.id])};
+  IMENU.preghiere={title:"Preghiere del libretto",ar:"صلوات الكتيّب",hint:"Compieta, Memorare…",parent:"",items:()=>INNI.filter(c=>c.sec==="Preghiere").map(c=>[c.title,"","i-"+c.id])};
+}
+const IMENU_HOME=["anno","avvento","natale","quaresima","pasqua"], IMENU_ALTRO=["cantici","appendice","preghiere"];
+function iBtn(a,b,href,ar){return `<div class="item ib2" data-go="${esc(href)}"><span class="t"><span class="bi">${ar?`<span class="bar" dir="rtl">${esc(ar)}</span>`:""}<span class="${ar?"bit":"bit1"}" dir="ltr">${esc(a)}</span>${b?`<span class="ihint" dir="ltr">${esc(b)}</span>`:""}</span></span><span class="chev">›</span></div>`}
+function iRow(c){return `<div class="item ib2" data-go="i-${esc(c.id)}"><span class="t"><span class="bi">${c.hour?`<span class="ihour" dir="ltr">${esc(c.hour)}</span>`:""}<span class="bit1" dir="ltr">${esc(c.title)}</span>${!c.hour&&c.sub?`<span class="ihint" dir="ltr">${esc(c.sub)}</span>`:""}</span></span><span class="p">${c.page||""}</span></div>`}
+function renderInniHome(){
+  const d=new Date(),g=GIORNI_L[d.getDay()],sab=g==="SABATO";
+  const oggi=[["Lodi","صلاة الصباح",fcI(c=>c.name===g&&c.ora==="Lodi")],["Ora media","الساعة الوسطى",sab?fcI(c=>c.name==="OMNI DIE"):fcI(c=>c.name==="ORA MEDIA")],
+    ["Vespri","صلاة المساء",fcI(c=>c.name===g&&c.ora==="Vespri")],["Compieta","صلاة النوم",sab?fcI(c=>c.name==="O SPES MEA CARA"):fcI(c=>c.name==="COMPIETA"&&c.sec!=="Preghiere")]].filter(x=>x[2]);
+  let h=`<div class="sectitle"><h1>${bi("أَنَاشِيد","Inni")}</h1></div>`;
+  h+=`<div class="today"><div class="lab"><span>Oggi · ${capI(g)}</span><span class="tar">اليوم · ${GIORNI_AR[g]}</span></div>`+
+    oggi.map(([o,oa,c])=>`<div class="trow" data-go="i-${c.id}"><span class="o">${o}<br><span class="oa">${oa}</span></span><span class="tt">${esc(c.title)}</span><span class="chev">›</span></div>`).join("")+`</div>`;
+  h+=`<div class="list">`+IMENU_HOME.map(k=>iBtn(IMENU[k].title,IMENU[k].hint,"inni-"+k,IMENU[k].ar)).join("")+`</div>`;
+  const christe=fcI(c=>c.name==="CHRISTE CUNCTORUM");const ang=tempoPasq(d)?"regina":"angelus";
+  h+=`<div class="list" style="margin-top:12px">`+[`<div class="item ib2" data-go="s-${ang}"><span class="t">${bi(PR[ang].ar,PR[ang].it)}</span><span class="chev">›</span></div>`,christe?iRow(christe):""].join("")+`</div>`;
+  h+=`<div class="sechead">${bi("أخرى","Altro")}</div><div class="list">`+IMENU_ALTRO.map(k=>iBtn(IMENU[k].title,IMENU[k].hint,"inni-"+k,IMENU[k].ar)).join("")+`</div>`;
+  h+=`<div class="ifoot" dir="ltr"><a href="https://drive.google.com/drive/folders/1ak3Kv8y1ltFpNXcO46MDwW5sgQFkRUjz" target="_blank" rel="noopener">File audio (Google Drive)</a><br>Testi dal libretto «Inni»</div>`;
+  $("#main").innerHTML=h;
+}
+function renderInniMenu(k){
+  const M=IMENU[k];
+  $("#main").innerHTML=`<div class="sectitle"><h1>${bi(M.ar||"",M.title)}</h1>${M.hint&&!M.parent?`<div class="mainname" dir="ltr">${esc(M.hint)}</div>`:""}</div>`+
+    `<div class="list">${M.items().map(([a,b,href])=>iBtn(a,b,href)).join("")}</div>`;
+}
+let iView="testo";try{iView=store.get("iview","testo")}catch(e){}
+function iBlock(b){
+  if(b.head)return `<div class="h3">${esc(b.head)}</div>`;
+  const prose=(b.lines||[]).some(l=>l.t.length>70);
+  const cls=["blk",b.trad?"trad":"",b.ant?"ant":"",prose?"prose":""].join(" ");
+  const ls=(b.lines||[]).map(l=>`<div class="l${l.it?" it":""}${l.rub?" rub":""}">${l.mark?`<span class="mk">${l.mark}.</span>`:""}${esc(l.t)}</div>`).join("");
+  return `<div class="${cls}"><div class="n">${b.n?b.n+".":""}</div><div class="ls">${ls}</div></div>`;
+}
+function renderInno(c){
+  const ti=c.blocks.findIndex(b=>b.head==="Traduzione");
+  const main=ti<0?c.blocks:c.blocks.slice(0,ti);
+  const trad=ti<0?[]:c.blocks.slice(ti+1).map(b=>Object.assign({},b,{trad:0,lines:(b.lines||[]).map(l=>Object.assign({},l,{it:0}))}));
+  const tabs=[["testo","Testo · النص"]];if(trad.length)tabs.push(["traduzione","Traduzione · الترجمة"]);if(c.pdfpages&&c.pdfpages.length)tabs.push(["spartito","Spartito · النوتة"]);
+  const v=tabs.some(x=>x[0]===iView)?iView:"testo";
+  const i=INNI.indexOf(c),prev=INNI[i-1],next=INNI[i+1];
+  let h=`<div class="song inno" dir="ltr">${c.sub?`<div class="isub">${esc(c.sub)}</div>`:""}<h1 class="ititle">${esc(c.title)}</h1><div class="meta">${esc(c.sec)} · pag. ${c.page}</div>`;
+  h+=`<div class="tools"><button class="ib" data-act="fs-">A−</button><button class="ib" data-act="fs+">A+</button></div>`;
+  if(tabs.length>1)h+=`<div class="tabs">${tabs.map(([k,l])=>`<button class="chip${v===k?" on":""}" data-iv="${k}">${l}</button>`).join("")}</div>`;
+  h+=`<div class="itext ipane" data-p="testo">${main.map(iBlock).join("")}</div><div class="itext ipane" data-p="traduzione">${trad.map(iBlock).join("")}</div><div class="ipages ipane" data-p="spartito" id="ivs"></div>`;
+  h+=`<div class="inav">${prev?`<div class="ib2n" data-go="i-${prev.id}"><div class="k">‹ Precedente</div><div class="v">${esc(prev.title)}</div></div>`:"<span></span>"}${next?`<div class="ib2n nx" data-go="i-${next.id}"><div class="k">Successivo ›</div><div class="v">${esc(next.title)}</div></div>`:"<span></span>"}</div>`;
+  h+=`<button class="tomenu" data-menu="1"><span dir="rtl">العودة إلى القائمة</span> · <span dir="ltr">Torna al menù</span></button></div>`;
+  $("#main").innerHTML=h;window.scrollTo(0,0);
+  const show=k=>{document.querySelectorAll(".ipane").forEach(p=>p.classList.toggle("hidden",p.dataset.p!==k));document.querySelectorAll("[data-iv]").forEach(x=>x.classList.toggle("on",x.dataset.iv===k));
+    const vs=$("#ivs");if(k==="spartito"&&!vs.innerHTML)vs.innerHTML=c.pdfpages.map(p=>`<img loading="lazy" alt="Pagina ${p-1}" src="inni/img/${p}.webp">`).join("")};
+  show(v);
+  document.querySelectorAll("[data-iv]").forEach(b=>b.onclick=()=>{iView=b.dataset.iv;store.set("iview",iView);show(iView)});
+}
+if(HOSTED){fetch("inni/inni.json").then(r=>r.ok?r.json():null).then(a=>{if(a){prepInni(a);buildIMenu();render()}}).catch(()=>{})}
 function allSongs(){
   const m = new Map();
   BUILTIN.forEach(b=>m.set(b.id,{...b,src:"book"}));
@@ -360,11 +484,18 @@ function setChrome(){
 }
 function route(){const h=location.hash.slice(1);
   if(h==="preghiere")return {plist:1};
+  if(h==="inni")return {inni:"home"}; if(h.startsWith("inni-"))return {inni:h.slice(5)}; if(h.startsWith("i-"))return {hymn:h.slice(2)};
   if(h.startsWith("s-"))return {song:h.slice(2)}; if(h.startsWith("sec-"))return {sec:h.slice(4)}; return {}}
 function render(){
   setChrome(); const r=route();
-  $("#back").classList.toggle("hidden",!r.song&&!r.sec&&!r.plist); $("#chips").classList.toggle("hidden",!!(r.song||r.plist));
-  $("#fab").classList.toggle("hidden",!canEdit||!!(r.song||r.plist));
+  const sub_=!!(r.song||r.plist||r.inni||r.hymn);
+  $("#back").classList.toggle("hidden",!r.song&&!r.sec&&!r.plist&&!r.inni&&!r.hymn); $("#chips").classList.toggle("hidden",sub_);
+  $("#fab").classList.toggle("hidden",!canEdit||sub_);
+  if(r.inni||r.hymn){ if(!INNI){$("#main").innerHTML=`<div class="empty">…</div>`;return}
+    if(r.hymn){const c=IBY[r.hymn];if(c)return renderInno(c);location.hash="inni";return}
+    if(r.inni==="home"){lastInni="inni";window.scrollTo(0,0);return renderInniHome()}
+    if(IMENU[r.inni]){lastInni="inni-"+r.inni;window.scrollTo(0,0);return renderInniMenu(r.inni)}
+    location.hash="inni";return}
   if(r.plist) return renderPrayerList();
   if(r.song&&PR[r.song]) return renderPrayer(PR[r.song]);
   if(r.song){const s=allSongs().find(x=>x.id===r.song); if(s) return renderSong(s); location.hash="";return}
@@ -387,6 +518,7 @@ function songRows(arr){
 function renderList(sec){
   const songs=allSongs(); renderChips();
   const q=norm(S.q); let h=""; if(q)sec=null;
+  const ih=q&&INNI?INNI.filter(c=>q.split(/\s+/).every(w=>c._n.includes(w))):[];
   if(!sec){
     if(dbState==="editor")h+=`<div class="banner">${t("shared")}</div>`;
     else if(dbState==="offline")h+=`<div class="banner">${t("offline")}</div>`;
@@ -405,12 +537,13 @@ function renderList(sec){
     if(sec){const u=SUB[sec];h+=`<div class="sectitle"><h1>${biSub(u)}</h1></div>`}
     const groups=new Map();list.sort((a,b)=>SUB[subOf(a)].rank-SUB[subOf(b)].rank).forEach(s=>{const k=subOf(s);if(!groups.has(k))groups.set(k,[]);groups.get(k).push(s)});
     for(const [k,arr] of groups){ if(!sec)h+=`<div class="sechead">${biSub(SUB[k])}<span class="n">${arr.length}</span></div>`; h+=songRows(arr); }
-    if(!list.length&&!h.includes('class="list prl"'))h+=`<div class="empty">${sec&&!q&&S.filter==="all"?t("emptySec"):t("none")}</div>`;
+    if(!list.length&&!ih.length&&!h.includes('class="list prl"'))h+=`<div class="empty">${sec&&!q&&S.filter==="all"?t("emptySec"):t("none")}</div>`;
   } else {
     const cnt={};songs.forEach(s=>{const k=subOf(s);cnt[k]=(cnt[k]||0)+1});
     h+=`<div class="sechead">${esc(t("sections"))}</div><div class="list">`+SECTIONS.map(m=>{const n=cnt[m.id]||0;
       return `<div class="item sub${n?"":" zero"}" data-sec="${m.id}"><span class="t">${bi(m.ar,m.it)}</span><span class="count">${n}</span><span class="chev">›</span></div>`}).join("")+`</div>`;
   }
+  if(ih.length)h+=`<div class="sechead">${bi("أَنَاشِيد","Inni")}<span class="n">${ih.length}</span></div><div class="list">${ih.map(iRow).join("")}</div>`;
   $("#main").innerHTML=h;
   const db_=$("#dlbar");if(db_){db_.onclick=e=>{if(e.target.id==="dlx"){store.set("dlHide",true);db_.remove();return}openDownload()}}
 }
@@ -518,7 +651,9 @@ function toast(m){const d=document.createElement("div");d.className="toast";d.te
 $("#lang").onclick=()=>{S.lang=S.lang==="ar"?"it":"ar";store.set("lang",S.lang);render()};
 $("#dark").onclick=()=>{dark=!dark;store.set("dark",dark);render()};
 $("#more").onclick=openMenu;
-$("#back").onclick=()=>{const r=route();if(r.song&&PR[r.song]){const f=S.from;S.from=null;location.hash=f||(PR[r.song].grp&&!S.q?"preghiere":"");return}if(r.song){const s=allSongs().find(x=>x.id===r.song);location.hash=s&&S.filter==="all"&&!S.q?"sec-"+subOf(s):""}else location.hash=""};
+$("#back").onclick=()=>{const r=route();
+  if(r.hymn){location.hash=S.q?"":lastInni;return}
+  if(r.inni){const M=IMENU[r.inni];location.hash=M&&M.parent?"inni-"+M.parent:(r.inni==="home"?"":"inni");return}if(r.song&&PR[r.song]){const f=S.from;S.from=null;location.hash=f||(PR[r.song].grp&&!S.q?"preghiere":"");return}if(r.song){const s=allSongs().find(x=>x.id===r.song);location.hash=s&&S.filter==="all"&&!S.q?"sec-"+subOf(s):""}else location.hash=""};
 $("#fab").onclick=()=>{if(canEdit)openEditor(null,route().sec)};
 $("#q").oninput=e=>{S.q=e.target.value;const r=route();if(r.song||r.plist){location.hash="";return}renderList(r.sec)};
 $("#sheet").onclick=e=>{if(e.target.id==="sheet")closeSheet()};
@@ -527,6 +662,7 @@ $("#main").onclick=e=>{
   if(e.target.closest("[data-menu]")){S.q="";$("#q").value="";S.filter="all";location.hash="";window.scrollTo(0,0);return}
   const tg=e.target.closest("[data-tog]");if(tg){const box=tg.classList.contains("tref")?tg.nextElementSibling:tg.closest(".exp");const tr=box.previousElementSibling;const open=box.classList.toggle("hidden")===false;tr.classList.toggle("open",open);if(!open)tr.scrollIntoView({block:"nearest",behavior:"smooth"});return}
   if(e.target.closest("[data-pl]")){location.hash="preghiere";return}
+  const go=e.target.closest("[data-go]");if(go){if(go.dataset.go.startsWith("s-")&&route().inni)S.from=location.hash.slice(1);location.hash=go.dataset.go;return}
   const sc=e.target.closest("[data-sec]");if(sc){location.hash="sec-"+sc.dataset.sec;return}
   const it=e.target.closest(".item");if(it){S.transpose=0;S.tab="text";location.hash="s-"+it.dataset.id;return}
   const tb=e.target.closest("[data-tab]");if(tb){S.tab=tb.dataset.tab;render();return}
