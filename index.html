@@ -290,9 +290,36 @@ const $ = s=>document.querySelector(s);
 const t = k=>T[S.lang][k];
 const esc = s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
+/* ---------- canti dal file canti.txt (repository GitHub) ---------- */
+let fileSongs=[];
+const SECMAP={arabo:"arabi",arabi:"arabi",ar:"arabi","عربي":"arabi","عربية":"arabi",italiano:"ita",italiani:"ita",it:"ita",ita:"ita",altre:"altre",altro:"altre",altri:"altre",otros:"altre",otras:"altre"};
+const LANGMAP={arabo:"ar",árabe:"ar",ar:"ar",italiano:"it",it:"it",latino:"la",latín:"la",la:"la",spagnolo:"es",español:"es",es:"es",francese:"fr",francés:"fr",fr:"fr",inglese:"en",inglés:"en",en:"en"};
+function slugT(x){return "f-"+String(x).normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9\u0600-\u06ff]+/g,"-").replace(/^-|-$/g,"").slice(0,60)}
+function parseCanti(txt){
+  const out=[];let cur=null,part="body";const seen={};
+  for(const raw of String(txt).replace(/\r/g,"").split("\n")){
+    const l=raw.replace(/\s+$/,"");
+    if(/^===/.test(l)){
+      if(cur)out.push(cur);
+      const f=l.replace(/^=+\s*/,"").split("|").map(x=>x.trim());
+      const title=f[0]||"";if(!title){cur=null;continue}
+      const secK=(f[2]||"").toLowerCase(), lgK=(f[3]||"").toLowerCase();
+      const lang=LANGMAP[lgK]||(SECMAP[secK]==="arabi"?"ar":SECMAP[secK]==="ita"?"it":"xx");
+      let id=slugT(title);if(seen[id])id+="-"+(++seen[id]);else seen[id]=1;
+      cur={id,title,title_ar:f[1]||"",sec:SECMAP[secK]||(lang==="ar"?"arabi":lang==="it"?"ita":"altre"),lang,body:"",translit_ar:"",note_ar:"",order:5000+out.length};part="body";continue}
+    if(!cur)continue;
+    const m=l.match(/^---\s*(pronuncia|pronunciación|نطق|traslitterazione|spiegazione|explicación|nota|شرح)\s*-*$/i);
+    if(m){part=/spieg|explic|nota|شرح/i.test(m[1])?"note_ar":"translit_ar";continue}
+    cur[part]+=(cur[part]?"\n":"")+l;
+  }
+  if(cur)out.push(cur);
+  return out.map(s=>({...s,body:s.body.trim(),translit_ar:s.translit_ar.trim(),note_ar:s.note_ar.trim()})).filter(s=>s.body);
+}
+if(HOSTED){fetch("canti.txt",{cache:"no-cache"}).then(r=>r.ok?r.text():"").then(t=>{fileSongs=parseCanti(t);if(fileSongs.length)render()}).catch(()=>{})}
 function allSongs(){
   const m = new Map();
   BUILTIN.forEach(b=>m.set(b.id,{...b,src:"book"}));
+  fileSongs.forEach(b=>m.set(b.id,{...b,src:"book"}));
   Object.values(remote).forEach(r=>m.set(r.id,{...(m.get(r.id)||{}),...r,src:m.has(r.id)?"book+":"shared"}));
   Object.values(local).forEach(r=>m.set(r.id,{...(m.get(r.id)||{}),...r,src:m.has(r.id)&&!r.mine?"book+":"local"}));
   return [...m.values()].filter(s=>!s.removed);
