@@ -163,6 +163,8 @@ html[dir=rtl] .pv.myst .i{margin-top:2px}
 .ib2n{cursor:pointer;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 14px;font-family:Lora,serif}
 .ib2n.nx{text-align:right}.ib2n .k{font-size:12px;color:var(--muted)}.ib2n .v{font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 /* ---------- tema blu (logo) ---------- */
+.sechead{scroll-margin-top:130px}
+.tomenu.tsec{margin-top:0;background:var(--chip);color:var(--accent);box-shadow:none;font-weight:500;font-size:15px}
 .tomenu{display:block;width:100%;margin:26px 0 10px;padding:14px;border:none;border-radius:14px;cursor:pointer;font-size:16px;font-weight:600;color:#fff;background:linear-gradient(135deg,#0d47a1,#0a2a63);box-shadow:0 3px 10px rgba(10,42,99,.25)}
 :root{--bg:#f1f5fc;--card:#fff;--ink:#12203d;--muted:#5a6683;--line:#d8e1f0;--accent:#0d47a1;--chip:#e2eaf8;--chord:#c62828;--red:#d32f2f;--navy:#0a2a63;--navy2:#0d47a1}
 .dark{--bg:#06142f;--card:#0c2149;--ink:#edf2ff;--muted:#9fb0d2;--line:#1d3769;--accent:#8db3ff;--chip:#142f66;--chord:#ff8a80;--red:#ff6b6b}
@@ -241,18 +243,21 @@ function prLines(lines){let n=0;return lines.map((l,i)=>{
   const lead=c?`<span class="sp"></span><span class="sp2"></span>`:`<span class="n">${n}</span>${mk?`<span class="m">${mk}</span>`:""}`;
   const ilead=`<span class="sp"></span>${mk||c?`<span class="sp2"></span>`:""}`;
   return `<div class="pv${c?" cont":""}${hc?" hascont":""}"><div class="a" lang="ar">${c?"":`<span class="am"><span class="an">${n}</span>${mk?`<span class="amk">${mk}</span>`:""}</span>`}${esc(l.ar)}</div><div class="tr">${lead}<span>${trH(l.tr)}</span></div><div class="i">${ilead}<span>${esc(l.it)}</span></div></div>`}).join("")}
+function backBtns(lab,target){
+  const menu=`<button class="tomenu${lab?" tsec":""}" data-menu="1"><span dir="rtl">العودة إلى القائمة</span> · <span dir="ltr">Torna al menù</span></button>`;
+  return lab?`<button class="tomenu" data-back="${esc(target)}"><span dir="rtl">${esc(lab[0])}</span> · <span dir="ltr">${esc(lab[1])}</span></button>`+menu:menu}
 function renderPrayer(p){
   let h=`<div class="song prayer"><h1>${bi(p.ar,p.it)}</h1><div class="meta ptrm" dir="ltr" style="font-family:Lora,serif;font-style:italic;text-align:start">${trH(p.tr)}</div>`;
   h+=`<div class="tools"><button class="ib" dir="ltr" data-act="fs-" aria-label="${t("size")}">A−</button><button class="ib" dir="ltr" data-act="fs+" aria-label="${t("size")}">A+</button></div>`;
   if(p.note)h+=`<div class="pnote">${esc(p.note)}</div>`;
-  $("#main").innerHTML=h+prLines(p.lines)+`<button class="tomenu" data-menu="1"><span dir="rtl">العودة إلى القائمة</span> · <span dir="ltr">Torna al menù</span></button>`+"</div>"; window.scrollTo(0,0);
+  $("#main").innerHTML=h+prLines(p.lines)+backBtns(p.grp?(p.grp==="ros"?["العودة إلى الوردية","Torna al Rosario"]:["العودة إلى الصلوات","Torna alle preghiere"]):null,p.grp?"preghiere#g-"+p.grp:"")+"</div>"; window.scrollTo(0,0);
 }
 function prayerRows(list,bar){return `<div class="list prl">`+list.map(p=>`<div class="item pr" data-id="${esc(p.id)}"><span class="t">${bi(p.ar,p.it)}<span class="ptr">${trH(p.tr)}</span></span><span class="chev">›</span></div>`).join("")+(bar?`<div class="item prbar" data-pl="1"><span class="ic">✠</span><span class="t">${bi("صَلَوَات","Preghiere")}</span><span class="count">${PRAYERS.length-1}</span><span class="chev">›</span></div>`+(INNI?`<div class="item prbar" data-go="inni"><span class="ic">♪</span><span class="t">${bi("أَنَاشِيد","Inni")}</span><span class="count">${INNI.length}</span><span class="chev">›</span></div>`:""):"")+`</div>`}
 function renderPrayerList(){
   let h=`<div class="sectitle"><h1>${bi("صَلَوَات","Preghiere")}</h1></div>`;
   for(const [g,it,ar] of PGRP){const ps=PRAYERS.filter(p=>p.grp===g);if(!ps.length)continue;
-    h+=`<div class="sechead">${bi(ar,it)}<span class="n">${ps.length}</span></div><div class="list">`+ps.map(p=>`<div class="item pr" data-id="${esc(p.id)}"><span class="t">${bi(p.ar,p.it)}<span class="ptr">${trH(p.tr)}</span></span><span class="chev">›</span></div>`).join("")+`</div>`}
-  $("#main").innerHTML=h; window.scrollTo(0,0);
+    h+=`<div class="sechead" id="g-${g}">${bi(ar,it)}<span class="n">${ps.length}</span></div><div class="list">`+ps.map(p=>`<div class="item pr" data-id="${esc(p.id)}"><span class="t">${bi(p.ar,p.it)}<span class="ptr">${trH(p.tr)}</span></span><span class="chev">›</span></div>`).join("")+`</div>`}
+  $("#main").innerHTML=h; window.scrollTo(0,0); if(S.scrollTo){const el=document.getElementById(S.scrollTo);S.scrollTo=null;if(el)el.scrollIntoView({block:"start"})}
 }
 function prText(p){const f=ls=>ls.map(l=>[l.ar||"",l.tr||"",l.it||"",l.lines?f(l.lines):""].join(" ")).join(" ");return p.it+" "+p.ar+" "+p.tr+" "+f(p.lines)}
 const SECTIONS = [
@@ -432,7 +437,8 @@ function renderInno(c){
   if(tabs.length>1)h+=`<div class="tabs">${tabs.map(([k,l])=>`<button class="chip${v===k?" on":""}" data-iv="${k}">${l}</button>`).join("")}</div>`;
   h+=`<div class="itext ipane" data-p="testo">${main.map(iBlock).join("")}</div><div class="itext ipane" data-p="traduzione">${trad.map(iBlock).join("")}</div><div class="ipages ipane" data-p="spartito" id="ivs"></div>`;
   h+=`<div class="inav">${prev?`<div class="ib2n" data-go="i-${prev.id}"><div class="k">‹ Precedente</div><div class="v">${esc(prev.title)}</div></div>`:"<span></span>"}${next?`<div class="ib2n nx" data-go="i-${next.id}"><div class="k">Successivo ›</div><div class="v">${esc(next.title)}</div></div>`:"<span></span>"}</div>`;
-  h+=`<button class="tomenu" data-menu="1"><span dir="rtl">العودة إلى القائمة</span> · <span dir="ltr">Torna al menù</span></button></div>`;
+  const lm=lastInni.startsWith("inni-")?IMENU[lastInni.slice(5)]:null;
+  h+=backBtns(lm?[lm.ar?"العودة إلى "+lm.ar:"العودة",`Torna a: ${lm.title}`]:["العودة إلى الأناشيد","Torna agli Inni"],lastInni)+`</div>`;
   $("#main").innerHTML=h;window.scrollTo(0,0);
   const show=k=>{document.querySelectorAll(".ipane").forEach(p=>p.classList.toggle("hidden",p.dataset.p!==k));document.querySelectorAll("[data-iv]").forEach(x=>x.classList.toggle("on",x.dataset.iv===k));
     const vs=$("#ivs");if(k==="spartito"&&!vs.innerHTML)vs.innerHTML=c.pdfpages.map(p=>`<img loading="lazy" alt="Pagina ${p-1}" src="inni/img/${p}.webp">`).join("")};
@@ -653,12 +659,13 @@ $("#dark").onclick=()=>{dark=!dark;store.set("dark",dark);render()};
 $("#more").onclick=openMenu;
 $("#back").onclick=()=>{const r=route();
   if(r.hymn){location.hash=S.q?"":lastInni;return}
-  if(r.inni){const M=IMENU[r.inni];location.hash=M&&M.parent?"inni-"+M.parent:(r.inni==="home"?"":"inni");return}if(r.song&&PR[r.song]){const f=S.from;S.from=null;location.hash=f||(PR[r.song].grp&&!S.q?"preghiere":"");return}if(r.song){const s=allSongs().find(x=>x.id===r.song);location.hash=s&&S.filter==="all"&&!S.q?"sec-"+subOf(s):""}else location.hash=""};
+  if(r.inni){const M=IMENU[r.inni];location.hash=M&&M.parent?"inni-"+M.parent:(r.inni==="home"?"":"inni");return}if(r.song&&PR[r.song]){const f=S.from;S.from=null;if(!f&&PR[r.song].grp&&!S.q)S.scrollTo="g-"+PR[r.song].grp;location.hash=f||(PR[r.song].grp&&!S.q?"preghiere":"");return}if(r.song){const s=allSongs().find(x=>x.id===r.song);location.hash=s&&S.filter==="all"&&!S.q?"sec-"+subOf(s):""}else location.hash=""};
 $("#fab").onclick=()=>{if(canEdit)openEditor(null,route().sec)};
 $("#q").oninput=e=>{S.q=e.target.value;const r=route();if(r.song||r.plist){location.hash="";return}renderList(r.sec)};
 $("#sheet").onclick=e=>{if(e.target.id==="sheet")closeSheet()};
 $("#chips").onclick=e=>{const b=e.target.closest("[data-f]");if(b){S.filter=b.dataset.f;if(location.hash)location.hash="";else render()}};
 $("#main").onclick=e=>{
+  const bk=e.target.closest("[data-back]");if(bk){const [hh,anc]=bk.dataset.back.split("#");S.scrollTo=anc||null;if(location.hash.slice(1)===hh)render();else location.hash=hh;return}
   if(e.target.closest("[data-menu]")){S.q="";$("#q").value="";S.filter="all";location.hash="";window.scrollTo(0,0);return}
   const tg=e.target.closest("[data-tog]");if(tg){const box=tg.classList.contains("tref")?tg.nextElementSibling:tg.closest(".exp");const tr=box.previousElementSibling;const open=box.classList.toggle("hidden")===false;tr.classList.toggle("open",open);if(!open)tr.scrollIntoView({block:"nearest",behavior:"smooth"});return}
   if(e.target.closest("[data-pl]")){location.hash="preghiere";return}
