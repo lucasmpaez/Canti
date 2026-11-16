@@ -53,6 +53,7 @@ html[dir=rtl] .bi>span{text-align:right}html[dir=ltr] .bi>span{text-align:left}
 .song h1{font-size:24px;color:var(--accent);margin:14px 0 2px;font-weight:600}
 .meta{color:var(--muted);font-size:14px;margin-bottom:10px}
 .author{color:var(--red,#d32f2f);font-family:Lora,serif;font-style:italic;font-size:15px;margin:0 0 4px}
+.author span[dir=rtl]{font-family:"Noto Naskh Arabic",serif;font-style:normal}
 .tools{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 12px}
 .tabs{display:flex;gap:6px;margin:4px 0 14px}
 .body{font-size:var(--fs);line-height:1.55}
@@ -285,7 +286,7 @@ function biTitle(s){return s.title_ar?bi(s.title_ar,s.title):`<span class="bi"><
 
 const T = {
  ar:{brand:"ترانيم",search:"ابحث عن ترنيمة أو كلمة أو رقم…",all:"الكل",fav:"المفضلة",mine:"أضفتها أنا",
-  text:"النص",translit:"النطق بالعربية",author:"المؤلف",trad:"الترجمة بالعربية",note:"شرح",chords:"الأوتار",size:"حجم الخط",
+  text:"النص",translit:"النطق بالعربية",author:"المؤلف (بالحروف اللاتينية)",authorAr:"المؤلف بالعربية",trad:"الترجمة بالعربية",note:"شرح",chords:"الأوتار",size:"حجم الخط",
   edit:"تعديل",add:"ترنيمة جديدة",title:"العنوان الأصلي",titleAr:"العنوان بالعربية",section:"القسم",sectionAr:"اسم القسم بالعربية",lang:"لغة الترنيمة",
   body:"نص الترنيمة",bodyHelp:"سطر فارغ = مقطع جديد · <code>&gt;</code> في بداية السطر = اللازمة · <code>[Do]</code> قبل المقطع الصوتي = وتر",
   translitHelp:"كتابة النطق بالحروف العربية، بنفس ترتيب المقاطع",noteHelp:"شرح قصير أو ترجمة بالعربية",
@@ -304,7 +305,7 @@ const T = {
   dlHome:"أو أضفه إلى الشاشة الرئيسية:",dlIos:"آيفون (Safari): اضغط <b>مشاركة</b> ⬆︎ ثم <b>إضافة إلى الشاشة الرئيسية</b>.",dlAnd:"أندرويد (Chrome): اضغط <b>⋮</b> ثم <b>تثبيت التطبيق</b> أو <b>إضافة إلى الشاشة الرئيسية</b>.",dlNo:"لا يمكن التحميل هنا. افتح الرابط في المتصفح.",
   aboutText:"ترانيم من كتاب ترانيم «الشركة والتحرير» (لا تويل). النصوص اللاتينية والمدائح القديمة مدرجة في التطبيق؛ وباقي الترانيم يضيفها المسؤول عن التطبيق."},
  it:{brand:"Canti",search:"Cerca un canto, una parola o un numero…",all:"Tutti",fav:"Preferiti",mine:"Aggiunti da me",
-  text:"Testo",translit:"Pronuncia in arabo",author:"Autore",trad:"Traduzione in arabo",note:"Spiegazione",chords:"Accordi",size:"Carattere",
+  text:"Testo",translit:"Pronuncia in arabo",author:"Autore",authorAr:"Autore in arabo",trad:"Traduzione in arabo",note:"Spiegazione",chords:"Accordi",size:"Carattere",
   edit:"Modifica",add:"Nuovo canto",title:"Titolo originale",titleAr:"Titolo in arabo",section:"Sezione",sectionAr:"Nome della sezione in arabo",lang:"Lingua del canto",
   body:"Testo del canto",bodyHelp:"Riga vuota = nuova strofa · <code>&gt;</code> a inizio riga = ritornello · <code>[Do]</code> prima della sillaba = accordo",
   translitHelp:"La pronuncia scritta in caratteri arabi, strofa per strofa",noteHelp:"Breve spiegazione o traduzione in arabo",
@@ -358,8 +359,8 @@ function parseCanti(txt){
     cur[part]+=(cur[part]?"\n":"")+l;
   }
   if(cur)out.push(cur);
-  return out.map(s=>{let n=s.note_ar.trim(),author="";const ls=n.split("\n");if(ls[0]&&!/[\u0600-\u06ff]/.test(ls[0])){author=ls[0].trim();n=ls.slice(1).join("\n").trim()}
-    return {...s,author,body:s.body.trim(),translit_ar:s.translit_ar.trim(),trad_ar:s.trad_ar.trim(),note_ar:n}}).filter(s=>s.body);
+  return out.map(s=>{let n=s.note_ar.trim(),author="",author_ar="";const ls=n.split("\n");if(ls[0]&&/[A-Za-zÀ-ÿ]/.test(ls[0])){const ap=ls[0].split("|");author=ap[0].trim();author_ar=(ap[1]||"").trim();n=ls.slice(1).join("\n").trim()}
+    return {...s,author,author_ar,body:s.body.trim(),translit_ar:s.translit_ar.trim(),trad_ar:s.trad_ar.trim(),note_ar:n}}).filter(s=>s.body);
 }
 if(HOSTED){fetch("canti.txt",{cache:"no-cache"}).then(r=>r.ok?r.text():"").then(t=>{fileSongs=parseCanti(t);if(fileSongs.length)render()}).catch(()=>{})}
 
@@ -565,7 +566,7 @@ function renderList(sec){
       if(S.filter==="fav"&&!favs.has(s.id))return false;
       if(S.filter==="local"&&s.src!=="local")return false;
       if(qn)return s.n===qn;
-      if(q&&!norm(s.title+" "+(s.title_ar||"")+" "+s.body+" "+(s.translit_ar||"")+" "+(s.trad_ar||"")+" "+(s.note_ar||"")+" "+(s.author||"")).includes(q))return false;
+      if(q&&!norm(s.title+" "+(s.title_ar||"")+" "+s.body+" "+(s.translit_ar||"")+" "+(s.trad_ar||"")+" "+(s.note_ar||"")+" "+(s.author||"")+" "+(s.author_ar||"")).includes(q))return false;
       return true});
     if(sec){const u=SUB[sec];h+=`<div class="sectitle"><h1>${biSub(u)}</h1></div>`}
     const groups=new Map();list.sort((a,b)=>SUB[subOf(a)].rank-SUB[subOf(b)].rank).forEach(s=>{const k=subOf(s);if(!groups.has(k))groups.set(k,[]);groups.get(k).push(s)});
@@ -595,7 +596,7 @@ function renderSong(s){
   const rtl=s.lang==="ar"; const hasCh=/\[[^\]]+\]/.test(s.body||"");
   const tabs=[["text",t("text")]]; if(s.trad_ar)tabs.push(["trad",t("trad")]); if(s.translit_ar)tabs.push(["translit",t("translit")]); if(s.note_ar)tabs.push(["note",t("note")]);
   if(!tabs.some(x=>x[0]===S.tab))S.tab="text";
-  let h=`<div class="song"><h1>${biTitle(s)}</h1>${s.author?`<div class="author"><span dir="ltr">${esc(s.author)}</span></div>`:""}<div class="meta"><b>№ ${s.n}</b> · ${esc(secName(s))}${s.lang?" · "+esc(t("langs")[s.lang]||s.lang):""}${s.src==="local"?" · "+t("localOnly"):""}</div>`;
+  let h=`<div class="song"><h1>${biTitle(s)}</h1>${S.lang==="ar"&&s.author_ar?`<div class="author"><span dir="rtl">${esc(s.author_ar)}</span></div>`:s.author?`<div class="author"><span dir="ltr">${esc(s.author)}</span></div>`:""}<div class="meta"><b>№ ${s.n}</b> · ${esc(secName(s))}${s.lang?" · "+esc(t("langs")[s.lang]||s.lang):""}${s.src==="local"?" · "+t("localOnly"):""}</div>`;
   h+=`<div class="tools">
     <button class="ib${favs.has(s.id)?" on":""}" data-act="fav">★</button>
     <button class="ib" dir="ltr" data-act="fs-" aria-label="${t("size")}">A−</button><button class="ib" dir="ltr" data-act="fs+" aria-label="${t("size")}">A+</button>`;
@@ -619,6 +620,7 @@ function openEditor(s,presec){
   <label>${t("titleAr")}</label><input class="fld" id="e-titlear" dir="rtl" value="${esc(s.title_ar)}">
   <label>${t("title")}</label><input class="fld" id="e-title" dir="auto" value="${esc(s.title)}">
   <label>${t("author")}</label><input class="fld" id="e-author" dir="ltr" value="${esc(s.author||"")}">
+  <label>${t("authorAr")}</label><input class="fld" id="e-authorar" dir="rtl" value="${esc(s.author_ar||"")}">
   <label>${t("section")}</label><select class="fld" id="e-sec"><option value="">—</option>${SECTIONS.map(m=>`<option value="${m.id}"${cur===m.id?" selected":""}>${esc(m.ar+" · "+m.it)}</option>`).join("")}</select>
   <label>${t("lang")}</label><select class="fld" id="e-lang">${Object.keys(L).map(k=>`<option value="${k}"${s.lang===k?" selected":""}>${L[k]}</option>`).join("")}</select>
   <label>${t("body")}</label><textarea class="fld" id="e-body" dir="auto">${esc(s.body)}</textarea>
@@ -640,7 +642,7 @@ function openEditor(s,presec){
 function closeSheet(){$("#sheet").classList.add("hidden")}
 function slugId(){return "u"+Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
 async function saveSong(old,isNew){
-  const s={id:old.id||slugId(),title:$("#e-title").value.trim(),title_ar:$("#e-titlear").value.trim(),author:$("#e-author").value.trim(),sec:$("#e-sec").value,
+  const s={id:old.id||slugId(),title:$("#e-title").value.trim(),title_ar:$("#e-titlear").value.trim(),author:$("#e-author").value.trim(),author_ar:$("#e-authorar").value.trim(),sec:$("#e-sec").value,
     lang:$("#e-lang").value,body:$("#e-body").value.replace(/\s+$/,""),translit_ar:$("#e-tr").value.trim(),trad_ar:$("#e-trad").value.trim(),note_ar:$("#e-note").value.trim(),updated:Date.now()};
   if(!s.title||!s.body||!s.sec){toast(t("needTitle"));return}
   if(old.order!=null)s.order=old.order;
