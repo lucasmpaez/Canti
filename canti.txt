@@ -10,10 +10,9 @@
 #   idioma (opcional): arabo, italiano, latino, spagnolo, francese, inglese, portoghese, tedesco
 #   El título en árabe se puede dejar vacío:  === Bella ciao | | italiano
 #
-# Cada canto recibe un número automático, en el orden de este archivo
-# (los del libro van del 1 al 38; los de aquí siguen desde el 39).
-# Por eso: agrega siempre los cantos AL FINAL y no cambies el orden.
-# Para fijar otro número, ponlo como 5º campo:  === Titolo | titolo arabo | italiano | italiano | 120
+# Los números de los cantos los pone la app sola: primero los cantos en árabe,
+# después los italianos y después los de otras lenguas, cada grupo en orden
+# alfabético. Al agregar un canto, los números de los siguientes se corren.
 #
 # Debajo va el texto:
 #   - una línea vacía = estrofa nueva

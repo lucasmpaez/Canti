@@ -350,7 +350,7 @@ function parseCanti(txt){
       const secK=(f[2]||"").toLowerCase(), lgK=(f[3]||"").toLowerCase();
       const lang=LANGMAP[lgK]||(SECMAP[secK]==="arabi"?"ar":SECMAP[secK]==="ita"?"it":"xx");
       let id=slugT(title);if(seen[id])id+="-"+(++seen[id]);else seen[id]=1;
-      cur={id,title,num:/^\d+$/.test(f[4]||"")?+f[4]:0,title_ar:f[1]||"",sec:SECMAP[secK]||(lang==="ar"?"arabi":lang==="it"?"ita":"altre"),lang,body:"",translit_ar:"",trad_ar:"",note_ar:"",order:5000+out.length};part="body";continue}
+      cur={id,title,title_ar:f[1]||"",sec:SECMAP[secK]||(lang==="ar"?"arabi":lang==="it"?"ita":"altre"),lang,body:"",translit_ar:"",trad_ar:"",note_ar:"",order:5000+out.length};part="body";continue}
     if(!cur)continue;
     const m=l.match(/^---\s*(pronuncia|pronunciación|نطق|traslitterazione|spiegazione|explicación|nota|شرح)\s*-*$/i);
     const mt=l.match(/^---\s*(traduzione|traducción|traduccion|ترجمة|الترجمة)\s*-*$/i);if(mt){part="trad_ar";continue}
@@ -461,13 +461,13 @@ function renderInno(c){
 if(HOSTED){fetch("inni/inni.json").then(r=>r.ok?r.json():null).then(a=>{if(a){prepInni(a);buildIMenu();render()}}).catch(()=>{})}
 function allSongs(){
   const m = new Map();
-  const bmax=Math.max(0,...BUILTIN.map(b=>b.order||0));
-  BUILTIN.forEach(b=>m.set(b.id,{...b,n:b.n||b.order,src:"book"}));
-  fileSongs.forEach((b,i)=>m.set(b.id,{...b,n:b.num||bmax+i+1,src:"book"}));
+  BUILTIN.forEach(b=>m.set(b.id,{...b,src:"book"}));
+  fileSongs.forEach(b=>m.set(b.id,{...b,src:"book"}));
   Object.values(remote).forEach(r=>m.set(r.id,{...(m.get(r.id)||{}),...r,src:m.has(r.id)?"book+":"shared"}));
   Object.values(local).forEach(r=>m.set(r.id,{...(m.get(r.id)||{}),...r,src:m.has(r.id)&&!r.mine?"book+":"local"}));
-  const all=[...m.values()].filter(s=>!s.removed);let k=500;
-  all.filter(s=>!s.n).sort((a,b)=>(a.order||a.updated||0)-(b.order||b.updated||0)).forEach(s=>{s.n=++k});
+  const all=[...m.values()].filter(s=>!s.removed);
+  /* numeri: per sezione (arabo, italiano, altre) e poi in ordine alfabetico */
+  all.sort((a,b)=>SUB[subOf(a)].rank-SUB[subOf(b)].rank||sortKey(a).localeCompare(sortKey(b),"it")).forEach((s,i)=>{s.n=i+1});
   return all;
 }
 function secName(s){return nm(SUB[subOf(s)])}
@@ -539,9 +539,9 @@ function renderChips(){
   if(allSongs().some(s=>s.src==="local"))opts.push(["local",t("mine")]);
   $("#chips").innerHTML=opts.map(([k,l])=>`<button class="chip${S.filter===k?" on":""}" data-f="${esc(k)}">${esc(l)}</button>`).join("");
 }
+function sortKey(x){return String(x.title||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/^[^A-Za-z0-9\u0600-\u06ff]+/,"").toLowerCase()}
 function songRows(arr){
-  const k=x=>String(x.title||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/^[^A-Za-z0-9\u0600-\u06ff]+/,"").toLowerCase();
-  arr.sort((a,b)=>k(a).localeCompare(k(b),"it"));
+  arr.sort((a,b)=>a.n-b.n);
   return `<div class="list">`+arr.map(s=>
       `<div class="item" data-id="${esc(s.id)}"><span class="num">${s.n}</span><span class="t">${biTitle(s)}</span>`+
       (s.src==="local"?`<span class="tag">${S.lang==="ar"?"محلي":"locale"}</span>`:"")+
