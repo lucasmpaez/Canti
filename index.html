@@ -283,7 +283,7 @@ function biTitle(s){return s.title_ar?bi(s.title_ar,s.title):`<span class="bi"><
 
 const T = {
  ar:{brand:"ترانيم",search:"ابحث عن ترنيمة أو كلمة…",all:"الكل",fav:"المفضلة",mine:"أضفتها أنا",
-  text:"النص",translit:"النطق بالعربية",note:"شرح",chords:"الأوتار",size:"حجم الخط",
+  text:"النص",translit:"النطق بالعربية",trad:"الترجمة بالعربية",note:"شرح",chords:"الأوتار",size:"حجم الخط",
   edit:"تعديل",add:"ترنيمة جديدة",title:"العنوان الأصلي",titleAr:"العنوان بالعربية",section:"القسم",sectionAr:"اسم القسم بالعربية",lang:"لغة الترنيمة",
   body:"نص الترنيمة",bodyHelp:"سطر فارغ = مقطع جديد · <code>&gt;</code> في بداية السطر = اللازمة · <code>[Do]</code> قبل المقطع الصوتي = وتر",
   translitHelp:"كتابة النطق بالحروف العربية، بنفس ترتيب المقاطع",noteHelp:"شرح قصير أو ترجمة بالعربية",
@@ -302,7 +302,7 @@ const T = {
   dlHome:"أو أضفه إلى الشاشة الرئيسية:",dlIos:"آيفون (Safari): اضغط <b>مشاركة</b> ⬆︎ ثم <b>إضافة إلى الشاشة الرئيسية</b>.",dlAnd:"أندرويد (Chrome): اضغط <b>⋮</b> ثم <b>تثبيت التطبيق</b> أو <b>إضافة إلى الشاشة الرئيسية</b>.",dlNo:"لا يمكن التحميل هنا. افتح الرابط في المتصفح.",
   aboutText:"ترانيم من كتاب ترانيم «الشركة والتحرير» (لا تويل). النصوص اللاتينية والمدائح القديمة مدرجة في التطبيق؛ وباقي الترانيم يضيفها المسؤول عن التطبيق."},
  it:{brand:"Canti",search:"Cerca un canto o una parola…",all:"Tutti",fav:"Preferiti",mine:"Aggiunti da me",
-  text:"Testo",translit:"Pronuncia in arabo",note:"Spiegazione",chords:"Accordi",size:"Carattere",
+  text:"Testo",translit:"Pronuncia in arabo",trad:"Traduzione in arabo",note:"Spiegazione",chords:"Accordi",size:"Carattere",
   edit:"Modifica",add:"Nuovo canto",title:"Titolo originale",titleAr:"Titolo in arabo",section:"Sezione",sectionAr:"Nome della sezione in arabo",lang:"Lingua del canto",
   body:"Testo del canto",bodyHelp:"Riga vuota = nuova strofa · <code>&gt;</code> a inizio riga = ritornello · <code>[Do]</code> prima della sillaba = accordo",
   translitHelp:"La pronuncia scritta in caratteri arabi, strofa per strofa",noteHelp:"Breve spiegazione o traduzione in arabo",
@@ -348,14 +348,15 @@ function parseCanti(txt){
       const secK=(f[2]||"").toLowerCase(), lgK=(f[3]||"").toLowerCase();
       const lang=LANGMAP[lgK]||(SECMAP[secK]==="arabi"?"ar":SECMAP[secK]==="ita"?"it":"xx");
       let id=slugT(title);if(seen[id])id+="-"+(++seen[id]);else seen[id]=1;
-      cur={id,title,title_ar:f[1]||"",sec:SECMAP[secK]||(lang==="ar"?"arabi":lang==="it"?"ita":"altre"),lang,body:"",translit_ar:"",note_ar:"",order:5000+out.length};part="body";continue}
+      cur={id,title,title_ar:f[1]||"",sec:SECMAP[secK]||(lang==="ar"?"arabi":lang==="it"?"ita":"altre"),lang,body:"",translit_ar:"",trad_ar:"",note_ar:"",order:5000+out.length};part="body";continue}
     if(!cur)continue;
     const m=l.match(/^---\s*(pronuncia|pronunciación|نطق|traslitterazione|spiegazione|explicación|nota|شرح)\s*-*$/i);
+    const mt=l.match(/^---\s*(traduzione|traducción|traduccion|ترجمة|الترجمة)\s*-*$/i);if(mt){part="trad_ar";continue}
     if(m){part=/spieg|explic|nota|شرح/i.test(m[1])?"note_ar":"translit_ar";continue}
     cur[part]+=(cur[part]?"\n":"")+l;
   }
   if(cur)out.push(cur);
-  return out.map(s=>({...s,body:s.body.trim(),translit_ar:s.translit_ar.trim(),note_ar:s.note_ar.trim()})).filter(s=>s.body);
+  return out.map(s=>({...s,body:s.body.trim(),translit_ar:s.translit_ar.trim(),trad_ar:s.trad_ar.trim(),note_ar:s.note_ar.trim()})).filter(s=>s.body);
 }
 if(HOSTED){fetch("canti.txt",{cache:"no-cache"}).then(r=>r.ok?r.text():"").then(t=>{fileSongs=parseCanti(t);if(fileSongs.length)render()}).catch(()=>{})}
 
@@ -556,7 +557,7 @@ function renderList(sec){
       if(sec&&subOf(s)!==sec)return false;
       if(S.filter==="fav"&&!favs.has(s.id))return false;
       if(S.filter==="local"&&s.src!=="local")return false;
-      if(q&&!norm(s.title+" "+(s.title_ar||"")+" "+s.body+" "+(s.translit_ar||"")+" "+(s.note_ar||"")).includes(q))return false;
+      if(q&&!norm(s.title+" "+(s.title_ar||"")+" "+s.body+" "+(s.translit_ar||"")+" "+(s.trad_ar||"")+" "+(s.note_ar||"")).includes(q))return false;
       return true});
     if(sec){const u=SUB[sec];h+=`<div class="sectitle"><h1>${biSub(u)}</h1></div>`}
     const groups=new Map();list.sort((a,b)=>SUB[subOf(a)].rank-SUB[subOf(b)].rank).forEach(s=>{const k=subOf(s);if(!groups.has(k))groups.set(k,[]);groups.get(k).push(s)});
@@ -584,7 +585,7 @@ function openDownload(){
 }
 function renderSong(s){
   const rtl=s.lang==="ar"; const hasCh=/\[[^\]]+\]/.test(s.body||"");
-  const tabs=[["text",t("text")]]; if(s.translit_ar)tabs.push(["translit",t("translit")]); if(s.note_ar)tabs.push(["note",t("note")]);
+  const tabs=[["text",t("text")]]; if(s.trad_ar)tabs.push(["trad",t("trad")]); if(s.translit_ar)tabs.push(["translit",t("translit")]); if(s.note_ar)tabs.push(["note",t("note")]);
   if(!tabs.some(x=>x[0]===S.tab))S.tab="text";
   let h=`<div class="song"><h1>${biTitle(s)}</h1><div class="meta">${esc(secName(s))}${s.lang?" · "+esc(t("langs")[s.lang]||s.lang):""}${s.src==="local"?" · "+t("localOnly"):""}</div>`;
   h+=`<div class="tools">
@@ -596,13 +597,14 @@ function renderSong(s){
   if(tabs.length>1)h+=`<div class="tabs">${tabs.map(([k,l])=>`<button class="chip${S.tab===k?" on":""}" data-tab="${k}">${l}</button>`).join("")}</div>`;
   if(S.tab==="text") h+=`<div class="body ${rtl?"rtl":"ltr"}${S.chords?"":" nochords"}">${bodyHTML(s.body,S.transpose,S.chords)}</div>`;
   if(S.tab==="translit") h+=`<div class="body rtl nochords">${bodyHTML(s.translit_ar,0,false)}</div>`;
+  if(S.tab==="trad") h+=`<div class="body rtl nochords">${bodyHTML(s.trad_ar,0,false)}</div>`;
   if(S.tab==="note") h+=`<div class="note">${esc(s.note_ar)}</div>`;
   $("#main").innerHTML=h+backBtns(["العودة إلى الترانيم","Torna ai canti"],"canti")+"</div>"; window.scrollTo(0,0);
 }
 
 /* ---------- editor ---------- */
 function openEditor(s,presec){
-  const isNew=!s; s=s||{lang:"it",sec:presec||"",title:"",title_ar:"",body:"",translit_ar:"",note_ar:""};
+  const isNew=!s; s=s||{lang:"it",sec:presec||"",title:"",title_ar:"",body:"",translit_ar:"",trad_ar:"",note_ar:""};
   const cur=isNew?(SUB[s.sec]?s.sec:""):subOf(s);
   const L=t("langs");
   $("#panel").innerHTML=`<h2>${isNew?t("add"):t("edit")}</h2>
@@ -612,6 +614,7 @@ function openEditor(s,presec){
   <label>${t("lang")}</label><select class="fld" id="e-lang">${Object.keys(L).map(k=>`<option value="${k}"${s.lang===k?" selected":""}>${L[k]}</option>`).join("")}</select>
   <label>${t("body")}</label><textarea class="fld" id="e-body" dir="auto">${esc(s.body)}</textarea>
   <div class="help">${t("bodyHelp")}</div>
+  <label>${t("trad")}</label><textarea class="fld" id="e-trad" dir="rtl" style="min-height:110px">${esc(s.trad_ar||"")}</textarea>
   <label>${t("translit")}</label><textarea class="fld" id="e-tr" dir="rtl" style="min-height:110px">${esc(s.translit_ar)}</textarea>
   <div class="help">${t("translitHelp")}</div>
   <label>${t("note")}</label><textarea class="fld" id="e-note" dir="rtl" style="min-height:90px">${esc(s.note_ar)}</textarea>
@@ -629,7 +632,7 @@ function closeSheet(){$("#sheet").classList.add("hidden")}
 function slugId(){return "u"+Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
 async function saveSong(old,isNew){
   const s={id:old.id||slugId(),title:$("#e-title").value.trim(),title_ar:$("#e-titlear").value.trim(),sec:$("#e-sec").value,
-    lang:$("#e-lang").value,body:$("#e-body").value.replace(/\s+$/,""),translit_ar:$("#e-tr").value.trim(),note_ar:$("#e-note").value.trim(),updated:Date.now()};
+    lang:$("#e-lang").value,body:$("#e-body").value.replace(/\s+$/,""),translit_ar:$("#e-tr").value.trim(),trad_ar:$("#e-trad").value.trim(),note_ar:$("#e-note").value.trim(),updated:Date.now()};
   if(!s.title||!s.body||!s.sec){toast(t("needTitle"));return}
   if(old.order!=null)s.order=old.order;
   if(await writeSong(s)) toast(t("saved")); else toast(t("localOnly"));
