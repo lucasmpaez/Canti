@@ -7,7 +7,7 @@
 #   === Título original | título en árabe | sección | idioma
 #
 #   sección:  arabo · italiano · altre
-#   idioma (opcional): arabo, italiano, latino, spagnolo, francese, inglese
+#   idioma (opcional): arabo, italiano, latino, spagnolo, francese, inglese, portoghese, tedesco
 #   El título en árabe se puede dejar vacío:  === Bella ciao | | italiano
 #
 # Debajo va el texto:
@@ -164,3 +164,21 @@ La la...
 --- spiegazione
 Adriana Mascagni
 تَرْنِيمَةٌ مِنْ تَأْلِيفِ أَدْرِيَانَا مَاسْكَانْي، تُعَبِّرُ عَنِ الرَّغْبَةِ فِي لِقَاءِ اللهِ مَعَ بِدَايَةِ كُلِّ يَوْمٍ، وَعَنِ الِاسْتِعْدَادِ لِأَنْ يُشَكِّلَ اللهُ حَيَاتَنَا كَالطِّينِ بَيْنَ يَدَيْهِ.
+
+=== Alecrim | إِكْلِيلُ الجَبَلِ | altre | portoghese
+Alecrim, alecrim dourado
+que nasceu no campo sem ser semeado.
+
+Ai, meu amor, ai meu amor, que me disse assim:
+que a flor do campo é o alecrim.
+
+--- traduzione
+إِكْلِيلُ الجَبَلِ، إِكْلِيلُ الجَبَلِ الذَّهَبِيُّ،
+نَبَتَ فِي الحَقْلِ وَلَمْ يَزْرَعْهُ أَحَدٌ.
+
+آهِ يَا حَبِيبِي، آهِ يَا حَبِيبِي، هُوَ مَنْ قَالَ لِي:
+إِنَّ زَهْرَةَ الحَقْلِ هِيَ إِكْلِيلُ الجَبَلِ.
+
+--- spiegazione
+Canto popolare brasiliano
+أُغْنِيَةٌ شَعْبِيَّةٌ بَرَازِيلِيَّةٌ بِاللُّغَةِ البُرْتُغَالِيَّةِ، تَتَغَنَّى بِإِكْلِيلِ الجَبَلِ الَّذِي يَنْبُتُ وَحْدَهُ فِي الحُقُولِ، وَتَرْبِطُ جَمَالَهُ بِالحُبِّ.

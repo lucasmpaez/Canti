@@ -296,7 +296,7 @@ const T = {
   copyJson:"انسخ هذا النص واحفظه في ملف",close:"إغلاق",imported:"تم استيراد {n} ترنيمة",
   none:"لا توجد نتائج",confirmDel:"هل تريد حذف هذه الترنيمة؟ اضغط مرة أخرى للتأكيد.",
   needTitle:"اكتب العنوان والنص واختر القسم",emptySec:"لا توجد ترانيم في هذا القسم بعد. اضغط + لإضافة ترنيمة.",sections:"الأقسام",songs:"ترنيمة",up:"نصف درجة أعلى",down:"نصف درجة أدنى",
-  langs:{la:"لاتينية",it:"إيطالية",ar:"عربية",es:"إسبانية",fr:"فرنسية",en:"إنكليزية",xx:"أخرى"},
+  langs:{la:"لاتينية",it:"إيطالية",ar:"عربية",es:"إسبانية",fr:"فرنسية",en:"إنكليزية",pt:"برتغالية",de:"ألمانية",xx:"أخرى"},
   builtin:"من الكتاب",about:"حول التطبيق",
   dlBar:"حمّل التطبيق",dlSub:"على هاتفك، ليعمل مثل أي تطبيق",dlTitle:"حمّل التطبيق",dlOpen:"افتح التطبيق لتثبيته",dlOpenHelp:"تُفتح النسخة القابلة للتثبيت مع الشعار. هناك اضغط «حمّل التطبيق» ثم «تثبيت».",dlInstall:"⇩ ثبّت التطبيق الآن",dlSteps:"لتثبيته على الهاتف:",dlFile:"",dlFileHelp:"يُحفظ ملف واحد يعمل من دون إنترنت (الترانيم المشتركة تحتاج إلى الإنترنت).",
   dlHome:"أو أضفه إلى الشاشة الرئيسية:",dlIos:"آيفون (Safari): اضغط <b>مشاركة</b> ⬆︎ ثم <b>إضافة إلى الشاشة الرئيسية</b>.",dlAnd:"أندرويد (Chrome): اضغط <b>⋮</b> ثم <b>تثبيت التطبيق</b> أو <b>إضافة إلى الشاشة الرئيسية</b>.",dlNo:"لا يمكن التحميل هنا. افتح الرابط في المتصفح.",
@@ -315,7 +315,7 @@ const T = {
   copyJson:"Copia questo testo e salvalo in un file",close:"Chiudi",imported:"{n} canti importati",
   none:"Nessun risultato",confirmDel:"Eliminare questo canto? Premi di nuovo per confermare.",
   needTitle:"Scrivi titolo e testo e scegli la sezione",emptySec:"Ancora nessun canto in questa sezione. Premi + per aggiungerne uno.",sections:"Sezioni",songs:"canti",up:"Mezzo tono su",down:"Mezzo tono giù",
-  langs:{la:"latino",it:"italiano",ar:"arabo",es:"spagnolo",fr:"francese",en:"inglese",xx:"altro"},
+  langs:{la:"latino",it:"italiano",ar:"arabo",es:"spagnolo",fr:"francese",en:"inglese",pt:"portoghese",de:"tedesco",xx:"altro"},
   builtin:"dal libro",about:"Informazioni",
   dlBar:"Scarica l'app",dlSub:"sul telefono, per usarla come un'app",dlTitle:"Scarica l'app",dlOpen:"Apri l'app per installarla",dlOpenHelp:"Si apre la versione installabile, con il logo. Lì tocca «Scarica l'app» e poi «Installa».",dlInstall:"⇩ Installa l'app ora",dlSteps:"Per installarla sul telefono:",dlFile:"",dlFileHelp:"Si salva un solo file che funziona anche senza internet (i canti condivisi richiedono la connessione).",
   dlHome:"Oppure aggiungila alla schermata Home:",dlIos:"iPhone (Safari): tocca <b>Condividi</b> ⬆︎ e poi <b>Aggiungi alla schermata Home</b>.",dlAnd:"Android (Chrome): tocca <b>⋮</b> e poi <b>Installa app</b> o <b>Aggiungi a schermata Home</b>.",dlNo:"Qui non si può scaricare. Apri il link nel browser.",
@@ -335,7 +335,7 @@ const esc = s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"
 /* ---------- canti dal file canti.txt (repository GitHub) ---------- */
 let fileSongs=[];
 const SECMAP={arabo:"arabi",arabi:"arabi",ar:"arabi","عربي":"arabi","عربية":"arabi",italiano:"ita",italiani:"ita",it:"ita",ita:"ita",altre:"altre",altro:"altre",altri:"altre",otros:"altre",otras:"altre"};
-const LANGMAP={arabo:"ar",árabe:"ar",ar:"ar",italiano:"it",it:"it",latino:"la",latín:"la",la:"la",spagnolo:"es",español:"es",es:"es",francese:"fr",francés:"fr",fr:"fr",inglese:"en",inglés:"en",en:"en"};
+const LANGMAP={portoghese:"pt",portugués:"pt",portugues:"pt",português:"pt",pt:"pt",tedesco:"de",alemán:"de",de:"de",arabo:"ar",árabe:"ar",ar:"ar",italiano:"it",it:"it",latino:"la",latín:"la",la:"la",spagnolo:"es",español:"es",es:"es",francese:"fr",francés:"fr",fr:"fr",inglese:"en",inglés:"en",en:"en"};
 function slugT(x){return "f-"+String(x).normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9\u0600-\u06ff]+/g,"-").replace(/^-|-$/g,"").slice(0,60)}
 function parseCanti(txt){
   const out=[];let cur=null,part="body";const seen={};
