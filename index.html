@@ -269,7 +269,7 @@ function renderPrayerList(){
   let h=`<div class="sectitle"><h1>${bi("صَلَوَات","Preghiere")}</h1></div>`+prayerRows(PRAYERS.filter(p=>!p.grp),false);
   for(const [g,it,ar] of PGRP){const ps=PRAYERS.filter(p=>p.grp===g);if(!ps.length)continue;
     h+=`<div class="sechead" id="g-${g}">${bi(ar,it)}<span class="n">${ps.length}</span></div><div class="list">`+ps.map(p=>`<div class="item pr" data-id="${esc(p.id)}"><span class="t">${bi(p.ar,p.it)}<span class="ptr">${trH(p.tr)}</span></span><span class="chev">›</span></div>`).join("")+`</div>`}
-  $("#main").innerHTML=h; window.scrollTo(0,0); if(S.scrollTo){const el=document.getElementById(S.scrollTo);S.scrollTo=null;if(el)el.scrollIntoView({block:"start"})}
+  $("#main").innerHTML=h+backBtns(null); window.scrollTo(0,0); if(S.scrollTo){const el=document.getElementById(S.scrollTo);S.scrollTo=null;if(el)el.scrollIntoView({block:"start"})}
 }
 function prText(p){const f=ls=>ls.map(l=>[l.ar||"",l.tr||"",l.it||"",l.lines?f(l.lines):""].join(" ")).join(" ");return p.it+" "+p.ar+" "+p.tr+" "+f(p.lines)}
 const SECTIONS = [
@@ -424,12 +424,13 @@ function renderInniHome(){
   h+=`<div class="list" style="margin-top:12px">`+[`<div class="item ib2" data-go="s-${ang}"><span class="t">${bi(PR[ang].ar,PR[ang].it)}</span><span class="chev">›</span></div>`,christe?iRow(christe):""].join("")+`</div>`;
   h+=`<div class="sechead">${bi("أخرى","Altro")}</div><div class="list">`+IMENU_ALTRO.map(k=>iBtn(IMENU[k].title,IMENU[k].hint,"inni-"+k,IMENU[k].ar)).join("")+`</div>`;
   h+=`<div class="ifoot" dir="ltr"><a href="https://drive.google.com/drive/folders/1ak3Kv8y1ltFpNXcO46MDwW5sgQFkRUjz" target="_blank" rel="noopener">File audio (Google Drive)</a><br>Testi dal libretto «Inni»</div>`;
-  $("#main").innerHTML=h;
+  $("#main").innerHTML=h+backBtns(["العودة إلى الترانيم","Torna ai canti"],"canti");
 }
 function renderInniMenu(k){
   const M=IMENU[k];
   $("#main").innerHTML=`<div class="sectitle"><h1>${bi(M.ar||"",M.title)}</h1>${M.hint&&!M.parent?`<div class="mainname" dir="ltr">${esc(M.hint)}</div>`:""}</div>`+
-    `<div class="list">${M.items().map(([a,b,href])=>iBtn(a,b,href)).join("")}</div>`;
+    `<div class="list">${M.items().map(([a,b,href])=>iBtn(a,b,href)).join("")}</div>`+
+    (M.parent&&IMENU[M.parent]?backBtns([IMENU[M.parent].ar?"العودة إلى "+IMENU[M.parent].ar:"العودة","Torna a: "+IMENU[M.parent].title],"inni-"+M.parent):backBtns(["العودة إلى ترانيم القداس","Torna ai Canti per la messa"],"inni"));
 }
 let iView="testo";try{iView=store.get("iview","testo")}catch(e){}
 function iBlock(b){
@@ -579,7 +580,7 @@ function renderList(sec){
       (INNI?`<div class="item sub" data-go="inni"><span class="t">${bi("تَرَانِيم لِلْقُدَّاس","Canti per la messa")}</span><span class="count">${INNI.length}</span><span class="chev">›</span></div>`:"")+`</div>`;
   }
   if(ih.length)h+=`<div class="sechead">${bi("تَرَانِيم لِلْقُدَّاس","Canti per la messa")}<span class="n">${ih.length}</span></div><div class="list">${ih.map(iRow).join("")}</div>`;
-  $("#main").innerHTML=h;
+  $("#main").innerHTML=h+(sec?backBtns(["العودة إلى الترانيم","Torna ai canti"],"canti"):q?"":backBtns(null));
   const db_=$("#dlbar");if(db_){db_.onclick=e=>{if(e.target.id==="dlx"){store.set("dlHide",true);db_.remove();return}openDownload()}}
 }
 function openDownload(){
@@ -608,7 +609,8 @@ function renderSong(s){
   if(S.tab==="translit") h+=`<div class="body rtl nochords">${bodyHTML(s.translit_ar,0,false)}</div>`;
   if(S.tab==="trad") h+=`<div class="body rtl nochords">${bodyHTML(s.trad_ar,0,false)}</div>`;
   if(S.tab==="note") h+=`<div class="note">${esc(s.note_ar)}</div>`;
-  $("#main").innerHTML=h+backBtns(["العودة إلى الترانيم","Torna ai canti"],"canti")+"</div>"; window.scrollTo(0,0);
+  const su=SUB[subOf(s)];
+  $("#main").innerHTML=h+(S.q?backBtns(["العودة إلى الترانيم","Torna ai canti"],"canti"):backBtns(["العودة إلى "+su.ar,"Torna a: "+su.it],"sec-"+su.id))+"</div>"; window.scrollTo(0,0);
 }
 
 /* ---------- editor ---------- */
