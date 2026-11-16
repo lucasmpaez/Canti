@@ -1173,3 +1173,67 @@ cielito lindo, de contrabando.
 --- spiegazione
 Quirino Mendoza y Cortés · 1882
 أُغْنِيَةٌ شَعْبِيَّةٌ مَكْسِيكِيَّةٌ تَحْتَفِي بِالحُبِّ وَالفَرَحِ وَجَمَالِ الحَبِيبَةِ، وَتَدْعُو لَازِمَتُهَا إِلَى الغِنَاءِ بَدَلَ البُكَاءِ، لِأَنَّ الغِنَاءَ يُدْخِلُ البَهْجَةَ إِلَى القُلُوبِ. «Cielito lindo» (حَرْفِيًّا: «يَا سَمَائِي الصَّغِيرَةَ الجَمِيلَةَ») كَلِمَةُ تَحَبُّبٍ لِلْحَبِيبَةِ.
+
+=== Cockles and mussels | مَحَارٌ وَبَلَحُ بَحْرٍ | altre | inglese
+In Dublin's fair city
+where the girls are so pretty
+I first set my eyes on sweet Molly Malone,
+as she wheeled her wheelbarrow
+thro' the streets broad and narrow,
+crying cockles and mussels, alive, alive, oh!
+
+> Alive, alive oh! (2 volte)
+> crying cockles and mussels, alive, alive oh!
+
+She was a fishmonger,
+but sure 'twas no wonder
+for so were her father and mother before;
+and they both wheeled their barrow
+through the streets broad and narrow;
+crying cockles and mussels, alive, alive, oh!
+
+> Alive, alive oh! (2 volte)
+> crying cockles and mussels, alive, alive oh!
+
+She died of a fever and no one could save her,
+and that was the end of sweet Molly Malone;
+but her ghost wheels her barrow
+through the streets broad and narrow;
+crying cockles and mussels, alive, alive, oh!
+
+> Alive, alive oh! (2 volte)
+> crying cockles and mussels, alive, alive oh!
+
+--- traduzione
+فِي مَدِينَةِ دَبْلِنَ الجَمِيلَةِ
+حَيْثُ الصَّبَايَا حِسَانٌ،
+وَقَعَتْ عَيْنَايَ أَوَّلَ مَرَّةٍ عَلَى مُولِي مَالُونَ الحُلْوَةِ،
+وَهِيَ تَدْفَعُ عَرَبَتَهَا
+فِي الشَّوَارِعِ الوَاسِعَةِ وَالضَّيِّقَةِ،
+وَتُنَادِي: مَحَارٌ وَبَلَحُ بَحْرٍ، أَحْيَاءٌ، أَحْيَاءٌ، آهْ!
+
+أَحْيَاءٌ، أَحْيَاءٌ، آهْ! (مَرَّتَيْنِ)
+وَتُنَادِي: مَحَارٌ وَبَلَحُ بَحْرٍ، أَحْيَاءٌ، أَحْيَاءٌ، آهْ!
+
+كَانَتْ بَائِعَةَ سَمَكٍ،
+وَلَا عَجَبَ فِي ذَلِكَ،
+فَقَدْ كَانَ أَبُوهَا وَأُمُّهَا كَذَلِكَ مِنْ قَبْلُ؛
+وَكَانَا يَدْفَعَانِ عَرَبَتَهُمَا
+فِي الشَّوَارِعِ الوَاسِعَةِ وَالضَّيِّقَةِ،
+وَيُنَادِيَانِ: مَحَارٌ وَبَلَحُ بَحْرٍ، أَحْيَاءٌ، أَحْيَاءٌ، آهْ!
+
+أَحْيَاءٌ، أَحْيَاءٌ، آهْ! (مَرَّتَيْنِ)
+وَتُنَادِي: مَحَارٌ وَبَلَحُ بَحْرٍ، أَحْيَاءٌ، أَحْيَاءٌ، آهْ!
+
+مَاتَتْ بِالحُمَّى وَلَمْ يَسْتَطِعْ أَحَدٌ أَنْ يُنْقِذَهَا،
+وَتِلْكَ كَانَتْ نِهَايَةَ مُولِي مَالُونَ الحُلْوَةِ؛
+لَكِنَّ طَيْفَهَا مَا زَالَ يَدْفَعُ عَرَبَتَهَا
+فِي الشَّوَارِعِ الوَاسِعَةِ وَالضَّيِّقَةِ،
+وَيُنَادِي: مَحَارٌ وَبَلَحُ بَحْرٍ، أَحْيَاءٌ، أَحْيَاءٌ، آهْ!
+
+أَحْيَاءٌ، أَحْيَاءٌ، آهْ! (مَرَّتَيْنِ)
+وَتُنَادِي: مَحَارٌ وَبَلَحُ بَحْرٍ، أَحْيَاءٌ، أَحْيَاءٌ، آهْ!
+
+--- spiegazione
+Canzone tradizionale irlandese
+أُغْنِيَةٌ شَعْبِيَّةٌ إِيرْلَنْدِيَّةٌ مَشْهُورَةٌ، تُعْرَفُ أَيْضًا بِاسْمِ «مُولِي مَالُونَ». تَرْوِي قِصَّةَ بَائِعَةٍ شَابَّةٍ لِلْمَحَارِ وَبَلَحِ البَحْرِ فِي شَوَارِعِ دَبْلِنَ، تَمُوتُ بِالحُمَّى، لَكِنَّ ذِكْرَاهَا تَبْقَى حَيَّةً فِي المَدِينَةِ، وَقَدْ صَارَتِ الأُغْنِيَةُ رَمْزًا مِنْ رُمُوزِ دَبْلِنَ.
