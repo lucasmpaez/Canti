@@ -18,7 +18,8 @@
 # Opcional, después del texto:
 #   --- traduzione     (la traducción de la letra al árabe, estrofa por estrofa)
 #   --- pronuncia      (la pronunciación escrita en letras árabes)
-#   --- spiegazione    (una explicación o traducción en árabe)
+#   --- spiegazione    (1ª línea: el autor, en letras latinas → aparece bajo el título;
+#                       después, una explicación breve en árabe)
 #
 # Las líneas que empiezan con # (aquí arriba) no se muestran.
 # Ejemplo (borra el # de cada línea para probarlo):
@@ -77,7 +78,7 @@ Que el río está bravo y estoy cansado para volver
 > Que está aclarando y vamos pescando para vivir
 
 --- spiegazione
-Canción de Jorge Fandermole · 2002
+Jorge Fandermole · 2002
 
 === A new creation | خَلْقٌ جَدِيدٌ | altre | inglese
 What can I call my home?
