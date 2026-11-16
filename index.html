@@ -542,8 +542,8 @@ function renderChips(){
   $("#chips").innerHTML=opts.map(([k,l])=>`<button class="chip${S.filter===k?" on":""}" data-f="${esc(k)}">${esc(l)}</button>`).join("");
 }
 function sortKey(x){return String(x.title||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/^[^A-Za-z0-9\u0600-\u06ff]+/,"").toLowerCase()}
-function songRows(arr){
-  arr.sort((a,b)=>a.n-b.n);
+function songRows(arr,keep){
+  if(!keep)arr.sort((a,b)=>a.n-b.n);
   return `<div class="list">`+arr.map(s=>
       `<div class="item" data-id="${esc(s.id)}"><span class="num">${s.n}</span><span class="t">${biTitle(s)}</span>`+
       (s.src==="local"?`<span class="tag">${S.lang==="ar"?"محلي":"locale"}</span>`:"")+
@@ -553,12 +553,12 @@ function renderList(sec){
   const songs=allSongs(); renderChips();
   const q=norm(S.q); let h=""; if(q)sec=null;
   const qn=/^\d+$/.test(S.q.trim())?+S.q.trim():0;
-  const ih=q&&INNI&&!qn?INNI.filter(c=>q.split(/\s+/).every(w=>c._n.includes(w))):[];
+  let ih=q&&INNI&&!qn?INNI.filter(c=>q.split(/\s+/).every(w=>c._n.includes(w))):[];
   if(!sec){
     if(dbState==="editor")h+=`<div class="banner">${t("shared")}</div>`;
     else if(dbState==="offline")h+=`<div class="banner">${t("offline")}</div>`;
   }
-  if(!sec&&q&&!qn){const pl=PRAYERS.filter(p=>norm(prText(p)).includes(q));if(pl.length)h=`<div class="sechead">${bi("صَلَوَات","Preghiere")}<span class="n">${pl.length}</span></div>`+prayerRows(pl,false)+h}
+  let prH="";if(!sec&&q&&!qn){const pt=p=>norm(p.it+" "+p.ar+" "+p.tr).includes(q)?0:1;const pl=PRAYERS.filter(p=>norm(prText(p)).includes(q)).sort((a,b)=>pt(a)-pt(b));if(pl.length)prH=`<div class="sechead">${bi("صَلَوَات","Preghiere")}<span class="n">${pl.length}</span></div>`+prayerRows(pl,false)}
   if(!sec&&!q)h=`<div class="sectitle"><h1>${bi("تَرَانِيم","Canti")}</h1></div>`+h;
   const flat = q || S.filter!=="all" || sec;
   if(flat){
@@ -570,8 +570,18 @@ function renderList(sec){
       if(q&&!norm(s.title+" "+(s.title_ar||"")+" "+s.body+" "+(s.translit_ar||"")+" "+(s.trad_ar||"")+" "+(s.note_ar||"")+" "+(s.author||"")+" "+(s.author_ar||"")).includes(q))return false;
       return true});
     if(sec){const u=SUB[sec];h+=`<div class="sectitle"><h1>${biSub(u)}</h1></div>`}
+    if(q&&!qn){
+      /* ricerca: prima i titoli (quelli che iniziano con la parola cercata in cima), poi le corrispondenze nel testo */
+      const tn=x=>norm((x.title||"")+" "+(x.title_ar||"")), sc=x=>{const t=tn(x);return t.startsWith(q)||t.includes(" "+q)?0:t.includes(q)?1:2};
+      const tl=list.filter(x=>sc(x)<2).sort((a,b)=>sc(a)-sc(b)||a.n-b.n), bl=list.filter(x=>sc(x)===2);
+      const it=ih.filter(c=>norm(c.title).includes(q)); ih=ih.filter(c=>!norm(c.title).includes(q));
+      if(tl.length||it.length)h+=`<div class="sechead">${bi("العناوين","Titoli")}<span class="n">${tl.length+it.length}</span></div>`+(tl.length?songRows(tl,1):"")+(it.length?`<div class="list">${it.map(iRow).join("")}</div>`:"");
+      h+=prH;
+      if(bl.length)h+=`<div class="sechead">${bi("في النص","Nel testo")}<span class="n">${bl.length}</span></div>`+songRows(bl);
+    } else {
     const groups=new Map();list.sort((a,b)=>SUB[subOf(a)].rank-SUB[subOf(b)].rank).forEach(s=>{const k=subOf(s);if(!groups.has(k))groups.set(k,[]);groups.get(k).push(s)});
     for(const [k,arr] of groups){ if(!sec)h+=`<div class="sechead">${biSub(SUB[k])}<span class="n">${arr.length}</span></div>`; h+=songRows(arr); }
+    }
     if(!list.length&&!ih.length&&!h.includes('class="list prl"'))h+=`<div class="empty">${sec&&!q&&S.filter==="all"?t("emptySec"):t("none")}</div>`;
   } else {
     const cnt={};songs.forEach(s=>{const k=subOf(s);cnt[k]=(cnt[k]||0)+1});
