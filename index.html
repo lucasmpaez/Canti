@@ -148,11 +148,11 @@ html[dir=rtl] .pv.myst .i{margin-top:2px}
 .today .lab .tar{font-family:"Noto Naskh Arabic",serif;text-transform:none;letter-spacing:0;font-size:14px}
 .today .trow{display:flex;align-items:center;gap:10px;padding:7px 0;border-top:1px solid var(--line);cursor:pointer;direction:ltr}
 .today .trow:first-of-type{border-top:none}
-.today .o{width:86px;flex:none;font-family:Lora,serif;font-size:13px;color:var(--muted);line-height:1.2}.today .oa{font-family:"Noto Naskh Arabic",serif;font-size:12px}
+.today .o{width:86px;flex:none;font-family:Lora,serif;font-size:13px;color:var(--muted);line-height:1.2}.today .oa{font-family:"Noto Naskh Arabic",serif;font-size:12px}.today .oa1{font-family:"Noto Naskh Arabic",serif;font-size:14px;color:var(--ink,inherit)}.today .oi{font-size:11px}html[dir=rtl] .trow{direction:rtl}html[dir=rtl] .trow .tt{text-align:right}
 .today .tt{flex:1;font-family:Lora,serif;font-size:17px}
 .ifoot{text-align:center;color:var(--muted);font-size:13px;margin-top:24px;line-height:1.7;font-family:Lora,serif}.ifoot a{color:var(--accent)}
 .inno{text-align:left}.inno .isub{font-family:Lora,serif;font-size:12.5px;color:var(--red);font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin-top:14px}
-.inno h1.ititle{font-family:Lora,serif;margin-top:2px}.inno .meta{font-family:Lora,serif}
+.inno h1.ititle{font-family:Lora,serif;margin-top:2px}.inno .iar{text-align:right}.inno .iar .isub{font-family:"Noto Naskh Arabic",serif;letter-spacing:0;font-size:14px}.inno .iar .meta{font-family:"Noto Naskh Arabic",serif}.ihour.iha{font-family:"Noto Naskh Arabic",serif;letter-spacing:0;font-size:13px;display:block}.inno .meta{font-family:Lora,serif}
 .itext{font-family:Lora,serif;font-size:var(--fs);line-height:1.5;direction:ltr;text-align:left}
 .blk{display:flex;gap:10px;margin:0 0 .9em}
 .blk .n{width:1.6em;flex:none;text-align:right;color:var(--accent);font-size:.8em;padding-top:.15em;font-weight:600}
@@ -369,6 +369,14 @@ if(HOSTED){fetch("canti.txt",{cache:"no-cache"}).then(r=>r.ok?r.text():"").then(
 /* ---------- Inni (dal libretto «Inni»: dati in inni/inni.json, spartiti in inni/img) ---------- */
 let INNI=null, IBY={}, lastInni="inni";
 const INNI_SKIP=new Set(["c36","c37"]); // Angelus e Regina caeli: già tra le preghiere
+const INNI_AR={"c1": "الفَجْرُ يَتَلَأْلَأُ نُورًا", "c2": "أَيُّهَا الثَّالُوثُ غَيْرُ المُتَنَاهِي", "c3": "فِي أَوَّلِ ضِيَاءِ النَّهَارِ", "c4": "كَانَ النُّورُ الكَلِمَةَ الأُولَى", "c5": "يَا خَالِقَ العَالَمِ الأَزَلِيَّ", "c6": "يَا اللهُ، يَا مَنْ بِنُورٍ صَافٍ", "c7": "مَغْمُورِينَ فِي السِّرِّ العَظِيمِ", "c8": "هَلُمَّ أَيُّهَا الرُّوحُ القُدُسُ", "c9": "قَبْلَ أَنْ يَطْلُعَ الفَجْرُ", "c10": "يَا يَسُوعُ، يَا ذِكْرًا عَذْبًا", "c11": "أَيُّهَا المَسِيحُ، يَا بَهَاءً إِلَهِيًّا", "c12": "أَسْجُدُ لَكَ أَيُّهَا الفَادِي", "c13": "السَّلَامُ عَلَيْكِ يَا نَجْمَةَ البَحْرِ", "c14": "أَيُّهَا الخَالِقُ العَلِيُّ", "c15": "يَا إِلَهًا أَزَلِيًّا لَا يَتَغَيَّرُ", "c16": "كُلَّ يَوْمٍ", "c17": "وَقَدْ بَلَغْنَا خِتَامَ النَّهَارِ", "c18": "يَا رَجَائِيَ الحَبِيبَ", "c19": "اِرْفَعُوا أَبْصَارَكُمْ إِلَى السَّمَاءِ", "c20": "مُشِعًّا بَيْنَ الظُّلُمَاتِ الكَثِيفَةِ", "c21": "يَا شَمْسًا تُشْرِقُ", "c22": "بِكَ وَحْدَكَ يَسْتَنِيرُ اللَّيْلُ", "c23": "نُرَنِّمُ دَائِمًا", "c24": "مُحَرَّرِينَ مِنْ نِيرِ الشَّرِّ", "c25": "أَيَّتُهَا اللَّيْلَةُ المُنِيرَةُ", "c26": "مِنْ دَمِ الحَمَلِ", "c27": "نَشِيدُ زَكَرِيَّا", "c28": "نَشِيدُ مَرْيَمَ", "c29": "أَيُّهَا المَسِيحُ، رَبَّ الجَمِيعِ", "c30": "مَوْلُودُونَ مِنَ النُّورِ", "c31": "مَاءُ يَنْبُوعٍ صَافٍ", "c32": "أَنْتَ الجِذْرُ العَارِي المُقْتَلَعُ", "c33": "يَا رَبُّ، الوَاحِدُ فِي ثَالُوثٍ", "c34": "يَا رَبُّ، يَا قُوَّةَ الكَائِنَاتِ", "c35": "لِيُشْرِقْ فِي اللَّيْلِ", "c36": "التَّبْشِيرُ المَلَائِكِيُّ", "c37": "يَا مَلِكَةَ السَّمَاءِ", "c38": "صَلَاةُ النَّوْمِ", "c39": "اُذْكُرِي يَا مَرْيَمُ", "c40": "صَلَاةُ الأَبِ دُو غْرَانْمِيزُون", "c41": "صَلَاةٌ مِنْ أَجْلِ تَطْوِيبِ الأَبِ جُوسَّانِي"};
+const ORA_AR={"Lodi":"صلاة الصباح","Vespri":"صلاة المساء","Ora media":"الساعة الوسطى","Ora Media":"الساعة الوسطى","Compieta":"صلاة النوم"};
+const ISEC_AR={"Inni del tempo ordinario":"أناشيد خلال السنة","Inni durante l'anno":"أناشيد خلال السنة","Inni di altri tempi liturgici":"أناشيد الأزمنة الليتورجية","Cantici e altri inni":"تسابيح وأناشيد أخرى","Appendice":"ملحق","Preghiere":"صلوات"};
+const TEMPI_AR={AVVENTO:"المجيء",NATALE:"الميلاد",QUARESIMA:"الصوم الكبير",PASQUA:"الفصح"};
+const AR=()=>S.lang==="ar";
+function iTit(c){return AR()&&INNI_AR[c.id]?bi(INNI_AR[c.id],c.title):`<span class="bi"><span class="bit1" dir="ltr">${esc(c.title)}</span></span>`}
+function iTxt(c){return AR()&&INNI_AR[c.id]?INNI_AR[c.id]:c.title}
+function iSubAr(c){const d=GIORNI_AR[c.name]||TEMPI_AR[c.name];const o=ORA_AR[c.ora]||(!c.ora&&ORA_AR[c.sub])||"";return [d,o].filter(Boolean).join(" · ")}
 const GIORNI_L=["DOMENICA","LUNEDÌ","MARTEDÌ","MERCOLEDÌ","GIOVEDÌ","VENERDÌ","SABATO"];
 const GIORNI_AR={DOMENICA:"الأحد","LUNEDÌ":"الاثنين","MARTEDÌ":"الثلاثاء","MERCOLEDÌ":"الأربعاء","GIOVEDÌ":"الخميس","VENERDÌ":"الجمعة",SABATO:"السبت"};
 const capI=x=>x.charAt(0)+x.slice(1).toLowerCase();
@@ -412,15 +420,16 @@ function buildIMenu(){
   IMENU.preghiere={title:"Preghiere del libretto",ar:"صلوات الكتيّب",hint:"Compieta, Memorare…",parent:"",items:()=>INNI.filter(c=>c.sec==="Preghiere").map(c=>[c.title,"","i-"+c.id])};
 }
 const IMENU_HOME=["anno","avvento","natale","quaresima","pasqua"], IMENU_ALTRO=["cantici","appendice","preghiere"];
-function iBtn(a,b,href,ar){return `<div class="item ib2" data-go="${esc(href)}"><span class="t"><span class="bi">${ar?`<span class="bar" dir="rtl">${esc(ar)}</span>`:""}<span class="${ar?"bit":"bit1"}" dir="ltr">${esc(a)}</span>${b?`<span class="ihint" dir="ltr">${esc(b)}</span>`:""}</span></span><span class="chev">›</span></div>`}
-function iRow(c){return `<div class="item ib2" data-go="i-${esc(c.id)}"><span class="t"><span class="bi">${c.hour?`<span class="ihour" dir="ltr">${esc(c.hour)}</span>`:""}<span class="bit1" dir="ltr">${esc(c.title)}</span>${!c.hour&&c.sub?`<span class="ihint" dir="ltr">${esc(c.sub)}</span>`:""}</span></span><span class="p">${c.page||""}</span></div>`}
+function iBtn(a,b,href,ar){return `<div class="item ib2" data-go="${esc(href)}"><span class="t"><span class="bi">${ar?`<span class="bar" dir="rtl">${esc(ar)}</span>`:""}<span class="${ar?"bit":"bit1"}" dir="ltr">${esc(a)}</span>${b&&!AR()?`<span class="ihint" dir="ltr">${esc(b)}</span>`:""}</span></span><span class="chev">›</span></div>`}
+function iBtnAr(c,ora){return `<div class="item ib2" data-go="i-${esc(c.id)}"><span class="t">${ora&&ORA_AR[ora]?`<span class="ihour iha" dir="rtl">${ORA_AR[ora]}</span>`:""}${iTit(c)}</span><span class="chev">›</span></div>`}
+function iRow(c){if(AR())return iBtnAr(c,c.hour);return `<div class="item ib2" data-go="i-${esc(c.id)}"><span class="t"><span class="bi">${c.hour?`<span class="ihour" dir="ltr">${esc(c.hour)}</span>`:""}<span class="bit1" dir="ltr">${esc(c.title)}</span>${!c.hour&&c.sub?`<span class="ihint" dir="ltr">${esc(c.sub)}</span>`:""}</span></span><span class="p">${c.page||""}</span></div>`}
 function renderInniHome(){
   const d=new Date(),g=GIORNI_L[d.getDay()],sab=g==="SABATO";
   const oggi=[["Lodi","صلاة الصباح",fcI(c=>c.name===g&&c.ora==="Lodi")],["Ora media","الساعة الوسطى",sab?fcI(c=>c.name==="OMNI DIE"):fcI(c=>c.name==="ORA MEDIA")],
     ["Vespri","صلاة المساء",fcI(c=>c.name===g&&c.ora==="Vespri")],["Compieta","صلاة النوم",sab?fcI(c=>c.name==="O SPES MEA CARA"):fcI(c=>c.name==="COMPIETA"&&c.sec!=="Preghiere")]].filter(x=>x[2]);
   let h=`<div class="sectitle"><h1>${bi("تَرَانِيم لِلْقُدَّاس","Canti per la messa")}</h1></div>`;
   h+=`<div class="today"><div class="lab"><span>Oggi · ${capI(g)}</span><span class="tar">اليوم · ${GIORNI_AR[g]}</span></div>`+
-    oggi.map(([o,oa,c])=>`<div class="trow" data-go="i-${c.id}"><span class="o">${o}<br><span class="oa">${oa}</span></span><span class="tt">${esc(c.title)}</span><span class="chev">›</span></div>`).join("")+`</div>`;
+    oggi.map(([o,oa,c])=>`<div class="trow" data-go="i-${c.id}"><span class="o">${AR()?`<span class="oa1">${oa}</span><br><span class="oi">${o}</span>`:`${o}<br><span class="oa">${oa}</span>`}</span><span class="tt">${esc(iTxt(c))}</span><span class="chev">›</span></div>`).join("")+`</div>`;
   h+=`<div class="list">`+IMENU_HOME.map(k=>iBtn(IMENU[k].title,IMENU[k].hint,"inni-"+k,IMENU[k].ar)).join("")+`</div>`;
   const christe=fcI(c=>c.name==="CHRISTE CUNCTORUM");const ang=tempoPasq(d)?"regina":"angelus";
   h+=`<div class="list" style="margin-top:12px">`+[`<div class="item ib2" data-go="s-${ang}"><span class="t">${bi(PR[ang].ar,PR[ang].it)}</span><span class="chev">›</span></div>`,christe?iRow(christe):""].join("")+`</div>`;
@@ -430,8 +439,8 @@ function renderInniHome(){
 }
 function renderInniMenu(k){
   const M=IMENU[k];
-  $("#main").innerHTML=`<div class="sectitle"><h1>${bi(M.ar||"",M.title)}</h1>${M.hint&&!M.parent?`<div class="mainname" dir="ltr">${esc(M.hint)}</div>`:""}</div>`+
-    `<div class="list">${M.items().map(([a,b,href])=>iBtn(a,b,href)).join("")}</div>`+
+  $("#main").innerHTML=`<div class="sectitle"><h1>${bi(M.ar||"",M.title)}</h1>${M.hint&&!M.parent&&!AR()?`<div class="mainname" dir="ltr">${esc(M.hint)}</div>`:""}</div>`+
+    `<div class="list">${M.items().map(([a,b,href])=>{const c=AR()&&href.startsWith("i-")?INNI.find(x=>"i-"+x.id===href):null;return c?iBtnAr(c,b?a:""):iBtn(a,b,href)}).join("")}</div>`+
     (M.parent&&IMENU[M.parent]?backBtns([IMENU[M.parent].ar?"العودة إلى "+IMENU[M.parent].ar:"العودة","Torna a: "+IMENU[M.parent].title],"inni-"+M.parent):backBtns(["العودة إلى ترانيم القداس","Torna ai Canti per la messa"],"inni"));
 }
 let iView="testo";try{iView=store.get("iview","testo")}catch(e){}
@@ -449,11 +458,12 @@ function renderInno(c){
   const tabs=[["testo","Testo · النص"]];if(trad.length)tabs.push(["traduzione","Traduzione · الترجمة"]);if(c.pdfpages&&c.pdfpages.length)tabs.push(["spartito","Spartito · النوتة"]);
   const v=tabs.some(x=>x[0]===iView)?iView:"testo";
   const i=INNI.indexOf(c),prev=INNI[i-1],next=INNI[i+1];
-  let h=`<div class="song inno" dir="ltr">${c.sub?`<div class="isub">${esc(c.sub)}</div>`:""}<h1 class="ititle">${esc(c.title)}</h1><div class="meta">${esc(c.sec)} · pag. ${c.page}</div>`;
+  let h=AR()?`<div class="song inno" dir="ltr"><div dir="rtl" class="iar">${iSubAr(c)?`<div class="isub">${esc(iSubAr(c))}</div>`:""}<h1 class="ititle">${iTit(c)}</h1><div class="meta">${esc(ISEC_AR[c.sec]||c.sec)} · ص ${c.page}</div></div>`
+   :`<div class="song inno" dir="ltr">${c.sub?`<div class="isub">${esc(c.sub)}</div>`:""}<h1 class="ititle">${esc(c.title)}</h1><div class="meta">${esc(c.sec)} · pag. ${c.page}</div>`;
   h+=`<div class="tools"><button class="ib" data-act="fs-">A−</button><button class="ib" data-act="fs+">A+</button></div>`;
   if(tabs.length>1)h+=`<div class="tabs">${tabs.map(([k,l])=>`<button class="chip${v===k?" on":""}" data-iv="${k}">${l}</button>`).join("")}</div>`;
   h+=`<div class="itext ipane" data-p="testo">${main.map(iBlock).join("")}</div><div class="itext ipane" data-p="traduzione">${trad.map(iBlock).join("")}</div><div class="ipages ipane" data-p="spartito" id="ivs"></div>`;
-  h+=`<div class="inav">${prev?`<div class="ib2n" data-go="i-${prev.id}"><div class="k">‹ Precedente</div><div class="v">${esc(prev.title)}</div></div>`:"<span></span>"}${next?`<div class="ib2n nx" data-go="i-${next.id}"><div class="k">Successivo ›</div><div class="v">${esc(next.title)}</div></div>`:"<span></span>"}</div>`;
+  h+=`<div class="inav">${prev?`<div class="ib2n" data-go="i-${prev.id}"><div class="k">${AR()?"‹ السابق":"‹ Precedente"}</div><div class="v">${esc(iTxt(prev))}</div></div>`:"<span></span>"}${next?`<div class="ib2n nx" data-go="i-${next.id}"><div class="k">${AR()?"التالي ›":"Successivo ›"}</div><div class="v">${esc(iTxt(next))}</div></div>`:"<span></span>"}</div>`;
   const lm=lastInni.startsWith("inni-")?IMENU[lastInni.slice(5)]:null;
   h+=backBtns(lm?[lm.ar?"العودة إلى "+lm.ar:"العودة",`Torna a: ${lm.title}`]:["العودة إلى ترانيم القداس","Torna ai Canti per la messa"],lastInni)+`</div>`;
   $("#main").innerHTML=h;window.scrollTo(0,0);
