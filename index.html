@@ -48,6 +48,7 @@ main{max-width:720px;margin:0 auto;padding:6px 14px 90px}
 html[dir=rtl] .bi>span{text-align:right}html[dir=ltr] .bi>span{text-align:left}
 .sechead{display:flex;align-items:flex-end;gap:8px}.sechead .bi{flex:1}.sechead .n{color:var(--muted);font-weight:400;font-size:13px}
 .song h1 .bit{font-size:.62em;font-weight:400}.sectitle h1 .bit{font-size:.62em;font-weight:400}
+html[dir=rtl] .bi .bar{font-size:1.18em;line-height:1.5}html[dir=rtl] .bi .bit{font-size:.7em}html[dir=rtl] .song h1 .bit,html[dir=rtl] .sectitle h1 .bit{font-size:.5em}html[dir=rtl] .half .ha{font-size:36px}html[dir=rtl] .half .hl{font-size:16px}html[dir=rtl] .item .t .l{font-size:.85em}.tomenu .bba{display:block;font-size:1.12em}.tomenu .bbi{display:block;font-size:.72em;font-weight:400;opacity:.8;font-family:Lora,serif}
 .empty{color:var(--muted);text-align:center;padding:40px 10px}
 .fab{position:fixed;bottom:20px;inset-inline-end:20px;width:56px;height:56px;border-radius:50%;border:none;background:var(--accent);color:#fff;font-size:30px;box-shadow:0 4px 14px rgba(0,0,0,.25);cursor:pointer;z-index:6}
 .song h1{font-size:24px;color:var(--accent);margin:14px 0 2px;font-weight:600}
@@ -256,8 +257,9 @@ function prLines(lines){let n=0;return lines.map((l,i)=>{
   const ilead=`<span class="sp"></span>${mk||c?`<span class="sp2"></span>`:""}`;
   return `<div class="pv${c?" cont":""}${hc?" hascont":""}"><div class="a" lang="ar">${c?"":`<span class="am"><span class="an">${n}</span>${mk?`<span class="amk">${mk}</span>`:""}</span>`}${esc(l.ar)}</div><div class="tr">${lead}<span>${trH(l.tr)}</span></div><div class="i">${ilead}<span>${esc(l.it)}</span></div></div>`}).join("")}
 function backBtns(lab,target){
-  const menu=`<button class="tomenu${lab?" tsec":""}" data-menu="1"><span dir="rtl">العودة إلى القائمة</span> · <span dir="ltr">Torna al menù</span></button>`;
-  return lab?`<button class="tomenu" data-back="${esc(target)}"><span dir="rtl">${esc(lab[0])}</span> · <span dir="ltr">${esc(lab[1])}</span></button>`+menu:menu}
+  const menu=`<button class="tomenu${lab?" tsec":""}" data-menu="1">${bbi("العودة إلى القائمة","Torna al menù")}</button>`;
+  return lab?`<button class="tomenu" data-back="${esc(target)}">${bbi(esc(lab[0]),esc(lab[1]))}</button>`+menu:menu}
+function bbi(a,i){return S.lang==="ar"?`<span class="bba" dir="rtl">${a}</span><span class="bbi" dir="ltr">${i}</span>`:`<span dir="rtl">${a}</span> · <span dir="ltr">${i}</span>`}
 function renderPrayer(p){
   let h=`<div class="song prayer"><h1>${bi(p.ar,p.it)}</h1><div class="meta ptrm" dir="ltr" style="font-family:Lora,serif;font-style:italic;text-align:start">${trH(p.tr)}</div>`;
   h+=`<div class="tools"><button class="ib" dir="ltr" data-act="fs-" aria-label="${t("size")}">A−</button><button class="ib" dir="ltr" data-act="fs+" aria-label="${t("size")}">A+</button></div>`;
@@ -279,7 +281,7 @@ const SECTIONS = [
 ];
 const SUB = {}; SECTIONS.forEach((m,mi)=>{m.main=m;m.rank=mi;SUB[m.id]=m});
 function subOf(s){if(SUB[s.sec])return s.sec;if(s.sec==="arabi-gen"||s.lang==="ar")return "arabi";if(s.lang==="it")return "ita";return "altre"}
-function nm(o){return o.ar+" · "+o.it}
+function nm(o){return S.lang==="ar"?o.ar:o.ar+" · "+o.it}
 function bi(ar,it,cls=""){return `<span class="bi ${cls}"><span class="bar" dir="rtl">${esc(ar)}</span>${it&&it!==ar?`<span class="bit" dir="auto">${esc(it)}</span>`:""}</span>`}
 function biSub(o){return bi(o.ar,o.it)}
 function biTitle(s){return s.title_ar?bi(s.title_ar,s.title):`<span class="bi"><span class="bit" dir="auto">${esc(s.title)}</span></span>`}
