@@ -266,7 +266,7 @@ function renderPrayer(p){
   if(p.note)h+=`<div class="pnote">${esc(p.note)}</div>`;
   $("#main").innerHTML=h+prLines(p.lines)+backBtns(p.grp==="ros"?["العودة إلى الوردية","Torna al Rosario"]:["العودة إلى الصلوات","Torna alle preghiere"],p.grp?"preghiere#g-"+p.grp:"preghiere")+"</div>"; window.scrollTo(0,0);
 }
-function prayerRows(list,bar){return `<div class="list prl">`+list.map(p=>`<div class="item pr" data-id="${esc(p.id)}"><span class="t">${bi(p.ar,p.it)}<span class="ptr">${trH(p.tr)}</span></span><span class="chev">›</span></div>`).join("")+(bar?`<div class="item prbar" data-pl="1"><span class="ic">✠</span><span class="t">${bi("صَلَوَات","Preghiere")}</span><span class="count">${PRAYERS.length-1}</span><span class="chev">›</span></div>`+(INNI?`<div class="item prbar" data-go="inni"><span class="ic">♪</span><span class="t">${bi("تَرَانِيم لِلْقُدَّاس","Canti per la messa")}</span><span class="count">${INNI.length}</span><span class="chev">›</span></div>`:""):"")+`</div>`}
+function prayerRows(list,bar){return `<div class="list prl">`+list.map(p=>`<div class="item pr" data-id="${esc(p.id)}"><span class="t">${bi(p.ar,p.it)}<span class="ptr">${trH(p.tr)}</span></span><span class="chev">›</span></div>`).join("")+(bar?`<div class="item prbar" data-pl="1"><span class="ic">✠</span><span class="t">${bi("صَلَوَات","Preghiere")}</span><span class="count">${PRAYERS.length-1}</span><span class="chev">›</span></div>`+(INNI?`<div class="item prbar" data-go="inni"><span class="ic">♪</span><span class="t">${bi("تَرَانِيمُ وَأَنَاشِيدُ لِلْقُدَّاس","Canti e inni per la messa")}</span><span class="count">${INNI.length}</span><span class="chev">›</span></div>`:""):"")+`</div>`}
 function renderPrayerList(){
   let h=`<div class="sectitle"><h1>${bi("صَلَوَات","Preghiere")}</h1></div>`+prayerRows(PRAYERS.filter(p=>!p.grp),false);
   for(const [g,it,ar] of PGRP){const ps=PRAYERS.filter(p=>p.grp===g);if(!ps.length)continue;
@@ -427,7 +427,7 @@ function renderInniHome(){
   const d=new Date(),g=GIORNI_L[d.getDay()],sab=g==="SABATO";
   const oggi=[["Lodi","صلاة الصباح",fcI(c=>c.name===g&&c.ora==="Lodi")],["Ora media","الساعة الوسطى",sab?fcI(c=>c.name==="OMNI DIE"):fcI(c=>c.name==="ORA MEDIA")],
     ["Vespri","صلاة المساء",fcI(c=>c.name===g&&c.ora==="Vespri")],["Compieta","صلاة النوم",sab?fcI(c=>c.name==="O SPES MEA CARA"):fcI(c=>c.name==="COMPIETA"&&c.sec!=="Preghiere")]].filter(x=>x[2]);
-  let h=`<div class="sectitle"><h1>${bi("تَرَانِيم لِلْقُدَّاس","Canti per la messa")}</h1></div>`;
+  let h=`<div class="sectitle"><h1>${bi("تَرَانِيمُ وَأَنَاشِيدُ لِلْقُدَّاس","Canti e inni per la messa")}</h1></div>`;
   h+=`<div class="today"><div class="lab"><span>Oggi · ${capI(g)}</span><span class="tar">اليوم · ${GIORNI_AR[g]}</span></div>`+
     oggi.map(([o,oa,c])=>`<div class="trow" data-go="i-${c.id}"><span class="o">${AR()?`<span class="oa1">${oa}</span><br><span class="oi">${o}</span>`:`${o}<br><span class="oa">${oa}</span>`}</span><span class="tt">${esc(iTxt(c))}</span><span class="chev">›</span></div>`).join("")+`</div>`;
   h+=`<div class="list">`+IMENU_HOME.map(k=>iBtn(IMENU[k].title,IMENU[k].hint,"inni-"+k,IMENU[k].ar)).join("")+`</div>`;
@@ -441,7 +441,7 @@ function renderInniMenu(k){
   const M=IMENU[k];
   $("#main").innerHTML=`<div class="sectitle"><h1>${bi(M.ar||"",M.title)}</h1>${M.hint&&!M.parent&&!AR()?`<div class="mainname" dir="ltr">${esc(M.hint)}</div>`:""}</div>`+
     `<div class="list">${M.items().map(([a,b,href])=>{const c=AR()&&href.startsWith("i-")?INNI.find(x=>"i-"+x.id===href):null;return c?iBtnAr(c,b?a:""):iBtn(a,b,href)}).join("")}</div>`+
-    (M.parent&&IMENU[M.parent]?backBtns([IMENU[M.parent].ar?"العودة إلى "+IMENU[M.parent].ar:"العودة","Torna a: "+IMENU[M.parent].title],"inni-"+M.parent):backBtns(["العودة إلى ترانيم القداس","Torna ai Canti per la messa"],"inni"));
+    (M.parent&&IMENU[M.parent]?backBtns([IMENU[M.parent].ar?"العودة إلى "+IMENU[M.parent].ar:"العودة","Torna a: "+IMENU[M.parent].title],"inni-"+M.parent):backBtns(["العودة إلى ترانيم وأناشيد القداس","Torna ai Canti e inni per la messa"],"inni"));
 }
 let iView="testo";try{iView=store.get("iview","testo")}catch(e){}
 function iBlock(b){
@@ -465,7 +465,7 @@ function renderInno(c){
   h+=`<div class="itext ipane" data-p="testo">${main.map(iBlock).join("")}</div><div class="itext ipane" data-p="traduzione">${trad.map(iBlock).join("")}</div><div class="ipages ipane" data-p="spartito" id="ivs"></div>`;
   h+=`<div class="inav">${prev?`<div class="ib2n" data-go="i-${prev.id}"><div class="k">${AR()?"‹ السابق":"‹ Precedente"}</div><div class="v">${esc(iTxt(prev))}</div></div>`:"<span></span>"}${next?`<div class="ib2n nx" data-go="i-${next.id}"><div class="k">${AR()?"التالي ›":"Successivo ›"}</div><div class="v">${esc(iTxt(next))}</div></div>`:"<span></span>"}</div>`;
   const lm=lastInni.startsWith("inni-")?IMENU[lastInni.slice(5)]:null;
-  h+=backBtns(lm?[lm.ar?"العودة إلى "+lm.ar:"العودة",`Torna a: ${lm.title}`]:["العودة إلى ترانيم القداس","Torna ai Canti per la messa"],lastInni)+`</div>`;
+  h+=backBtns(lm?[lm.ar?"العودة إلى "+lm.ar:"العودة",`Torna a: ${lm.title}`]:["العودة إلى ترانيم وأناشيد القداس","Torna ai Canti e inni per la messa"],lastInni)+`</div>`;
   $("#main").innerHTML=h;window.scrollTo(0,0);
   const show=k=>{document.querySelectorAll(".ipane").forEach(p=>p.classList.toggle("hidden",p.dataset.p!==k));document.querySelectorAll("[data-iv]").forEach(x=>x.classList.toggle("on",x.dataset.iv===k));
     const vs=$("#ivs");if(k==="spartito"&&!vs.innerHTML)vs.innerHTML=c.pdfpages.map(p=>`<img loading="lazy" alt="Pagina ${p-1}" src="inni/img/${p}.webp">`).join("")};
@@ -599,9 +599,9 @@ function renderList(sec){
     const cnt={};songs.forEach(s=>{const k=subOf(s);cnt[k]=(cnt[k]||0)+1});
     h+=`<div class="sechead">${esc(t("sections"))}</div><div class="list">`+SECTIONS.map(m=>{const n=cnt[m.id]||0;
       return `<div class="item sub${n?"":" zero"}" data-sec="${m.id}"><span class="t">${bi(m.ar,m.it)}</span><span class="count">${n}</span><span class="chev">›</span></div>`}).join("")+
-      (INNI?`<div class="item sub" data-go="inni"><span class="t">${bi("تَرَانِيم لِلْقُدَّاس","Canti per la messa")}</span><span class="count">${INNI.length}</span><span class="chev">›</span></div>`:"")+`</div>`;
+      (INNI?`<div class="item sub" data-go="inni"><span class="t">${bi("تَرَانِيمُ وَأَنَاشِيدُ لِلْقُدَّاس","Canti e inni per la messa")}</span><span class="count">${INNI.length}</span><span class="chev">›</span></div>`:"")+`</div>`;
   }
-  if(ih.length)h+=`<div class="sechead">${bi("تَرَانِيم لِلْقُدَّاس","Canti per la messa")}<span class="n">${ih.length}</span></div><div class="list">${ih.map(iRow).join("")}</div>`;
+  if(ih.length)h+=`<div class="sechead">${bi("تَرَانِيمُ وَأَنَاشِيدُ لِلْقُدَّاس","Canti e inni per la messa")}<span class="n">${ih.length}</span></div><div class="list">${ih.map(iRow).join("")}</div>`;
   $("#main").innerHTML=h+(sec?backBtns(["العودة إلى الترانيم","Torna ai canti"],"canti"):q?"":backBtns(null));
   const db_=$("#dlbar");if(db_){db_.onclick=e=>{if(e.target.id==="dlx"){store.set("dlHide",true);db_.remove();return}openDownload()}}
 }
