@@ -26,6 +26,12 @@ header{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px so
 .brand{font-weight:600;font-size:19px;color:var(--accent);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ib{border:1px solid var(--line);background:var(--card);border-radius:10px;min-width:38px;height:38px;padding:0 9px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:4px;font-size:14px}
 .ib.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.zbtn{gap:1px;font-family:Lora,serif;font-weight:600}.zbtn .z1{font-size:12px}.zbtn .z2{font-size:19px}
+.zlist{display:flex;flex-direction:column;gap:10px;margin:6px 0 4px}
+.zopt{display:flex;align-items:center;gap:14px;width:100%;border:2px solid var(--line);background:var(--card);color:inherit;border-radius:14px;padding:10px 16px;cursor:pointer;text-align:start;min-height:60px}
+.zopt .za{font-family:Lora,serif;font-weight:600;width:56px;text-align:center;color:var(--accent);line-height:1}.zopt .zl{flex:1;font-size:17px}.zopt .zp{font-family:Lora,serif;color:var(--muted);font-size:14px}
+.zopt.on{border-color:var(--accent);background:var(--chip)}.zopt.on .zl::after{content:" ✓";color:var(--accent);font-weight:700}
+.zinfo{font-size:14px;color:var(--muted);margin:0 0 8px;line-height:1.6}
 .search{margin-top:8px;width:100%;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:9px 12px;font-size:16px}
 .chips{display:flex;gap:6px;overflow-x:auto;padding:8px 0 2px;scrollbar-width:none}
 .chip{flex:none;border:none;background:var(--chip);border-radius:999px;padding:5px 12px;font-size:14px;cursor:pointer;white-space:nowrap}
@@ -174,7 +180,7 @@ html[dir=rtl] .pv.myst .i{margin-top:2px}
 .dark{--bg:#06142f;--card:#0c2149;--ink:#edf2ff;--muted:#9fb0d2;--line:#1d3769;--accent:#8db3ff;--chip:#142f66;--chord:#ff8a80;--red:#ff6b6b}
 header{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);border-bottom:none;color:#fff;box-shadow:0 2px 10px rgba(5,25,70,.25)}
 .dark header{background:linear-gradient(135deg,#041029 0%,#0a2a63 100%)}
-.brand{color:#fff;display:flex;align-items:center;gap:9px}
+.brand{color:#fff;display:flex;align-items:center;gap:9px}.brand span{min-width:0;overflow:hidden;text-overflow:ellipsis}
 .brand img{width:32px;height:32px;border-radius:9px;clip-path:inset(0 round 9px);flex:none;box-shadow:0 0 0 1px rgba(255,255,255,.35)}
 header .ib{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.25);color:#fff}
 header .search{background:#fff;color:#12203d;border-color:transparent}
@@ -218,6 +224,7 @@ header .chip.on{background:#fff;color:var(--navy)}
     <button class="ib hidden" id="back" aria-label="back">‹</button>
     <div class="brand" id="brand"></div>
     <button class="ib" id="lang">IT</button>
+    <button class="ib zbtn" id="zoom" dir="ltr" aria-label="zoom"><span class="z1">A</span><span class="z2">A</span></button>
     <button class="ib" id="dark" aria-label="dark">◐</button>
     <button class="ib" id="more" aria-label="menu">⋯</button>
   </div>
@@ -331,7 +338,7 @@ const T = {
 const S = {lang:"ar", tab:"text", transpose:0, chords:true, filter:"all", q:"", confirmDel:false};
 const store = {get(k,d){try{const v=localStorage.getItem("canti:"+k);return v==null?d:JSON.parse(v)}catch(e){return d}},
                set(k,v){try{localStorage.setItem("canti:"+k,JSON.stringify(v))}catch(e){}}};
-S.lang = store.get("lang","ar"); let dark = store.get("dark",false); let fs = store.get("fs",18);
+S.lang = store.get("lang","ar"); let dark = store.get("dark",false); let fs = store.get("fs",18); let zoom = store.get("zoom",1);
 let favs = new Set(store.get("favs",[])); let local = store.get("local",{});
 let remote = {}; let db=null, canEdit=false, dbState="wait";
 const $ = s=>document.querySelector(s);
@@ -518,6 +525,7 @@ function setChrome(){
   document.documentElement.classList.toggle("dark",dark);
   $("#brand").innerHTML=`<img src="${LOGO}" alt=""><span>ترانيم · Canti</span>`; $("#q").placeholder=t("search"); $("#lang").textContent=S.lang==="ar"?"IT":"ع";
   document.documentElement.style.setProperty("--fs",fs+"px");
+  document.body.style.zoom=zoom===1?"":String(zoom); $("#zoom").classList.toggle("on",zoom!==1);
 }
 function route(){const h=location.hash.slice(1);
   if(h==="")return {home:1}; if(h==="canti")return {canti:1};
@@ -665,6 +673,17 @@ function openEditor(s,presec){
   const d=$("#e-del"); if(d) d.onclick=()=>{ if(!S.confirmDel){S.confirmDel=true;toast(t("confirmDel"));return} removeSong(s)};
 }
 function closeSheet(){$("#sheet").classList.add("hidden")}
+/* ---------- zoom (baja visión): ingrandisce tutta l'app ---------- */
+const ZOOMS=[[1,"عادي","Normale"],[1.15,"كبير","Grande"],[1.3,"كبير جدًّا","Molto grande"],[1.5,"ضخم","Enorme"],[1.75,"أقصى حجم","Massimo"]];
+function openZoom(){
+  const ar=S.lang==="ar";
+  $("#panel").innerHTML=`<h2>${ar?"حجم التطبيق":"Dimensione dell’app"} <span class="mainname">${ar?"Dimensione dell’app":"حجم التطبيق"}</span></h2>
+   <p class="zinfo">${ar?"يكبّر كل شيء: العناوين والأزرار والصور والنصوص.":"Ingrandisce tutto: titoli, pulsanti, immagini e testi."}</p>
+   <div class="zlist">${ZOOMS.map(([z,a,i])=>`<button class="zopt${z===zoom?" on":""}" data-z="${z}"><span class="za" style="font-size:${Math.round(18*z*z)}px">A</span><span class="zl">${ar?a:i}</span><span class="zp" dir="ltr">${Math.round(z*100)}%</span></button>`).join("")}</div>
+   <div class="row"><button class="btn" id="z-close">${t("close")}</button></div>`;
+  $("#sheet").classList.remove("hidden");$("#z-close").onclick=closeSheet;
+  $("#panel").querySelectorAll("[data-z]").forEach(b=>b.onclick=()=>{zoom=+b.dataset.z;store.set("zoom",zoom);setChrome();openZoom()});
+}
 function slugId(){return "u"+Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
 async function saveSong(old,isNew){
   const s={id:old.id||slugId(),title:$("#e-title").value.trim(),title_ar:$("#e-titlear").value.trim(),author:$("#e-author").value.trim(),author_ar:$("#e-authorar").value.trim(),sec:$("#e-sec").value,
@@ -715,6 +734,7 @@ function toast(m){const d=document.createElement("div");d.className="toast";d.te
 $("#lang").onclick=()=>{S.lang=S.lang==="ar"?"it":"ar";store.set("lang",S.lang);render()};
 $("#dark").onclick=()=>{dark=!dark;store.set("dark",dark);render()};
 $("#more").onclick=openMenu;
+$("#zoom").onclick=openZoom;
 $("#back").onclick=()=>{const r=route();
   if(r.hymn){location.hash=S.q?"":lastInni;return}
   if(r.inni){const M=IMENU[r.inni];location.hash=M&&M.parent?"inni-"+M.parent:(r.inni==="home"?"canti":"inni");return}
