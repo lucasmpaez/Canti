@@ -17,7 +17,7 @@
 :root{--bg:#faf7f2;--card:#fff;--ink:#1d1a17;--muted:#6f675e;--line:#e6dfd4;--accent:#8a2424;--chip:#f1ebe1;--chord:#1f5f8b;--fs:18px}
 .dark{--bg:#15130f;--card:#1f1c17;--ink:#ece6dc;--muted:#a59c90;--line:#35302a;--accent:#e08a7a;--chip:#2a2620;--chord:#7fb8e0}
 *{box-sizing:border-box}
-html,body{margin:0;background:var(--bg);color:var(--ink)}
+html,body{margin:0;background:var(--bg);color:var(--ink);overflow-x:hidden}
 body{font-family:"Noto Naskh Arabic",Lora,serif;font-size:16px;line-height:1.5;min-height:100vh}
 [dir=ltr] body,body.ltr{font-family:Lora,"Noto Naskh Arabic",serif}
 button,input,select,textarea{font:inherit;color:inherit}
@@ -62,7 +62,7 @@ html[dir=rtl] .bi .bar{font-size:1.18em;line-height:1.5}html[dir=rtl] .bi .bit{f
 .author{color:var(--red,#d32f2f);font-family:Lora,serif;font-style:italic;font-size:15px;margin:0 0 4px}
 .author span[dir=rtl]{font-family:"Noto Naskh Arabic",serif;font-style:normal}
 .tools{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 12px}
-.tabs{display:flex;gap:6px;margin:4px 0 14px}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 14px}
 .body{font-size:var(--fs);line-height:1.55}
 .body.ltr{direction:ltr;text-align:left;font-family:Lora,serif}
 .body.rtl{direction:rtl;text-align:right;font-family:"Noto Naskh Arabic",serif}
