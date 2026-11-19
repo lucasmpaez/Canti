@@ -2571,7 +2571,7 @@ San Nettario di Egina | الْقِدِّيسُ نِكْتَارِيُوسُ ال
 عُودِي بِعَزْمٍ لَا تَخَافِي
 وَاذْرِفِي فِي الْبَرْدِ دَمْعًا
 إِنَّ دَمْعَ الْعَيْنِ دَافِئْ
-مُنْذُ رَحَلْتِ عَنْ دِيَارِي
+مُذْ رَحَلْتِ عَنْ دِيَارِي
 فَارَقَ الْعُشْبُ ضِفَافِي
 
 لِمَاذَا أَرَدْتِ الْبُعْدَ عَنِّي
@@ -2582,7 +2582,7 @@ San Nettario di Egina | الْقِدِّيسُ نِكْتَارِيُوسُ ال
 أَنْ تَكُونِي كَيْ تُغَنِّي
 
 أَنَا مَا خَلَقْتُ لِلْعَذَابِ
-أَنْتِ مَا خُلِقْتِ لِلتُّرَابِ
+أَنْتِ مَا خَلَقْتُكِ لِلتُّرَابِ
 أَوْجَدْتُكِ كَيْ أَحْيَا مَعَكِ
 بِدُونِ بُعْدٍ وَاغْتِرَابِ
 أَوْجَدْتُكِ فِي الْكَوْنِ حُرَّةً
@@ -2604,7 +2604,7 @@ nella creazione io ho voluto
 che tu esistessi per cantare.
 
 Io non ho creato per il tormento,
-tu non sei stata creata per la polvere;
+te non ti ho creata per la polvere;
 ti ho fatta esistere per vivere con te,
 senza distanza né esilio;
 ti ho fatta libera nell'universo,
@@ -2615,7 +2615,7 @@ senza paura né turbamento.
 ʿūdī bi-ʿazmin lā takhāfī
 wa-dhrifī fi l-bardi damʿan
 inna damʿa l-ʿayni dāfiʾ
-mundhu raḥalti ʿan diyārī
+mudh raḥalti ʿan diyārī
 fāraqa l-ʿushbu ḍifāfī
 
 limādhā aradti l-buʿda ʿannī
@@ -2626,7 +2626,7 @@ innanī fi l-khalqi shiʾtu
 an takūnī kay tughannī
 
 anā mā khalaqtu li-l-ʿadhāb
-anti mā khuliqti li-t-turāb
+anti mā khalaqtuki li-t-turāb
 awjadtuki kay aḥyā maʿaki
 bidūni buʿdin wa-ghtirāb
 awjadtuki fi l-kawni ḥurratan
