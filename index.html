@@ -626,7 +626,8 @@ function openDownload(){
 }
 function renderSong(s){
   const rtl=s.lang==="ar"; const hasCh=/\[[^\]]+\]/.test(s.body||"");
-  const tabs=[["text",t("text")]]; if(s.trad_ar)tabs.push(["trad",t("trad")]); if(s.translit_ar)tabs.push(["translit",t("translit")]); if(s.note_ar)tabs.push(["note",t("note")]);
+  const sAr=s.lang==="ar"||subOf(s)==="arabi";const tl=k=>sAr?(k==="trad"?(S.lang==="ar"?"الترجمة بالإيطالية":"Traduzione in italiano"):(S.lang==="ar"?"بالحروف اللاتينية":"Traslitterazione")):t(k);
+  const tabs=[["text",t("text")]]; if(s.trad_ar)tabs.push(["trad",tl("trad")]); if(s.translit_ar)tabs.push(["translit",tl("translit")]); if(s.note_ar)tabs.push(["note",t("note")]);
   if(!tabs.some(x=>x[0]===S.tab))S.tab="text";
   let h=`<div class="song"><h1>${biTitle(s)}</h1>${S.lang==="ar"&&s.author_ar?`<div class="author"><span dir="rtl">${esc(s.author_ar)}</span></div>`:s.author?`<div class="author"><span dir="ltr">${esc(s.author)}</span></div>`:""}<div class="meta"><b>№ ${s.n}</b> · ${esc(secName(s))}${s.lang?" · "+esc(t("langs")[s.lang]||s.lang):""}${s.src==="local"?" · "+t("localOnly"):""}</div>`;
   h+=`<div class="tools">
@@ -637,8 +638,8 @@ function renderSong(s){
   h+=(canEdit?`<button class="ib" data-act="edit">✎ ${t("edit")}</button>`:"")+`</div>`;
   if(tabs.length>1)h+=`<div class="tabs">${tabs.map(([k,l])=>`<button class="chip${S.tab===k?" on":""}" data-tab="${k}">${l}</button>`).join("")}</div>`;
   if(S.tab==="text") h+=`<div class="body ${rtl?"rtl":"ltr"}${S.chords?"":" nochords"}">${bodyHTML(s.body,S.transpose,S.chords)}</div>`;
-  if(S.tab==="translit") h+=`<div class="body rtl nochords">${bodyHTML(s.translit_ar,0,false)}</div>`;
-  if(S.tab==="trad") h+=`<div class="body rtl nochords">${bodyHTML(s.trad_ar,0,false)}</div>`;
+  if(S.tab==="translit") h+=`<div class="body ${sAr?"ltr":"rtl"} nochords">${bodyHTML(s.translit_ar,0,false)}</div>`;
+  if(S.tab==="trad") h+=`<div class="body ${sAr?"ltr":"rtl"} nochords">${bodyHTML(s.trad_ar,0,false)}</div>`;
   if(S.tab==="note") h+=`<div class="note">${esc(s.note_ar)}</div>`;
   const su=SUB[subOf(s)];
   $("#main").innerHTML=h+(S.q?backBtns(["العودة إلى الترانيم","Torna ai canti"],"canti"):backBtns(["العودة إلى "+su.ar,"Torna a: "+su.it],"sec-"+su.id))+"</div>"; window.scrollTo(0,0);
