@@ -17,7 +17,7 @@
 :root{--bg:#faf7f2;--card:#fff;--ink:#1d1a17;--muted:#6f675e;--line:#e6dfd4;--accent:#8a2424;--chip:#f1ebe1;--chord:#1f5f8b;--fs:18px}
 .dark{--bg:#15130f;--card:#1f1c17;--ink:#ece6dc;--muted:#a59c90;--line:#35302a;--accent:#e08a7a;--chip:#2a2620;--chord:#7fb8e0}
 *{box-sizing:border-box}
-html,body{margin:0;background:var(--bg);color:var(--ink);overflow-x:hidden}
+html,body{margin:0;background:var(--bg);color:var(--ink);overflow-x:clip}
 body{font-family:"Noto Naskh Arabic",Lora,serif;font-size:16px;line-height:1.5;min-height:100vh}
 [dir=ltr] body,body.ltr{font-family:Lora,"Noto Naskh Arabic",serif}
 button,input,select,textarea{font:inherit;color:inherit}
@@ -171,7 +171,6 @@ html[dir=rtl] .pv.myst .i{margin-top:2px}
 .l.it{font-style:italic}.l.rub{color:var(--red);font-style:italic;text-align:center}
 .itext.ar{direction:rtl;text-align:right;font-family:"Noto Naskh Arabic",serif;line-height:1.85}.itext.ar .blk .n{text-align:left}.itext.ar .blk .l{padding-left:0;padding-right:1.2em}.itext.ar .blk.ant{padding:10px 0 10px 12px}.itext.ar .h3{font-family:"Noto Naskh Arabic",serif}
 .ipages .imgerr{padding:18px;border:1px dashed var(--line);border-radius:10px;text-align:center;color:var(--muted)}
-header{transition:transform .25s ease}header.hid{transform:translateY(-110%)}
 .blk.trad{color:var(--muted)}.blk.ant{background:var(--chip);border-radius:12px;padding:10px 12px 10px 0}
 .mk{color:var(--red);font-size:.85em;margin-right:.35em}
 .h3{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:1.6em 0 .7em}
@@ -567,8 +566,6 @@ function parseInniAr(t){const o={};let id=null,buf=[];const fl=()=>{if(id)o[id]=
 function addInniAr(){if(!INNI)return;INNI.forEach(c=>{const a=IAR[c.id];if(a&&!c._arn){c._arn=1;c._n+="\n"+norm(a.join("\n"))}})}
 if(HOSTED){fetch("inni/inni.json").then(r=>r.ok?r.json():null).then(a=>{if(a){prepInni(a);addInniAr();buildIMenu();render()}}).catch(()=>{});
   fetch("inni/inni-arabo.txt",{cache:"no-cache"}).then(r=>r.ok?r.text():"").then(t=>{if(t){IAR=parseInniAr(t);addInniAr();if(location.hash.startsWith("#i-"))render()}}).catch(()=>{})}
-(function(){let ly=window.scrollY||0;addEventListener("scroll",()=>{const y=window.scrollY||0,hd=document.querySelector("header");if(!hd)return;
-  if(y<60||y<ly-4)hd.classList.remove("hid");else if(y>ly+4&&!(document.activeElement&&document.activeElement.closest&&document.activeElement.closest("header")))hd.classList.add("hid");ly=y},{passive:true})})();
 function allSongs(){
   const m = new Map();
   BUILTIN.forEach(b=>m.set(b.id,{...b,trad_ar:b.trad_ar||TRAD_B[b.id]||"",src:"book"}));
