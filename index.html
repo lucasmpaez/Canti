@@ -229,7 +229,7 @@ body.parch .chip[data-f=fav]{background:#0a2a63;color:#fff;border-color:#c9962c}
 .prow.big{min-height:96px}
 .pgrp{position:relative;display:flex;align-items:center;justify-content:center;margin:20px 0 12px;min-height:66px}
 .pgrp .band{position:absolute;left:0;right:0;top:50%;height:44px;transform:translateY(-50%);background:linear-gradient(180deg,#123d86,#0a2a63);border:2px solid #d9a840;border-radius:12px}
-.pgrp .lau{position:absolute;top:50%;transform:translateY(-50%);height:40px}.pgrp .lau.r{right:6px}.pgrp .lau.l{left:52px;transform:translateY(-50%) scaleX(-1)}
+.pgrp .lau{position:absolute;top:50%;transform:translateY(-50%);height:40px}.pgrp .lau.r{right:6px}.pgrp .lau.l{left:6px;transform:translateY(-50%) scaleX(-1)}
 .pgrp .mid{position:relative;background:linear-gradient(180deg,#164a9c,#0a2a63);border:2px solid #d9a840;border-radius:22px;padding:6px 26px;color:#fff;text-align:center;box-shadow:0 3px 8px rgba(0,0,40,.3)}
 .pgrp .mid .a{font-weight:700;font-size:1.15em;line-height:1.3}.pgrp .mid .b{font-family:Lora,serif;font-style:italic;font-size:.9em}
 .pgrp .cnt{position:absolute;left:4px;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;background:#0a2a63;border:3px solid #d9a840;color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-family:Lora,serif;font-size:20px}
@@ -337,7 +337,7 @@ function renderPrayerList(){
   document.body.classList.add("parch");
   let h=`<img class="phero" src="${PIMG.hero}" alt="صلوات · Preghiere"><div class="plist2">`+PRAYERS.filter(p=>!p.grp).map(p=>prRow(p,1)).join("")+`</div>`;
   for(const [g,it,ar] of PGRP){const ps=PRAYERS.filter(p=>p.grp===g);if(!ps.length)continue;
-    h+=`<div class="pgrp" id="g-${g}" dir="ltr"><div class="band"></div><img class="lau l" src="${PIMG.laurel}" alt=""><img class="lau r" src="${PIMG.laurel}" alt=""><span class="cnt">${ps.length}</span><div class="mid"><div class="a" dir="rtl">${ar}</div><div class="b">${it}</div></div></div><div class="plist2">`+ps.map(p=>prRow(p)).join("")+`</div>`}
+    h+=`<div class="pgrp" id="g-${g}" dir="ltr"><div class="band"></div><img class="lau l" src="${PIMG.laurel}" alt=""><img class="lau r" src="${PIMG.laurel}" alt=""><div class="mid"><div class="a" dir="rtl">${ar}</div><div class="b">${it}</div></div></div><div class="plist2">`+ps.map(p=>prRow(p)).join("")+`</div>`}
   $("#main").innerHTML=h+backBtns(null); window.scrollTo(0,0); if(S.scrollTo){const el=document.getElementById(S.scrollTo);S.scrollTo=null;if(el)el.scrollIntoView({block:"start"})}
 }
 function prText(p){const f=ls=>ls.map(l=>[l.ar||"",l.tr||"",l.it||"",l.lines?f(l.lines):""].join(" ")).join(" ");return p.it+" "+p.ar+" "+p.tr+" "+f(p.lines)}
