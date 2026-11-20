@@ -169,6 +169,9 @@ html[dir=rtl] .pv.myst .i{margin-top:2px}
 .blk .ls{flex:1;min-width:0}.blk .l{padding-left:1.2em;text-indent:-1.2em}.blk.prose .l{padding-left:0;text-indent:0}
 .plinks{display:flex;flex-direction:column;gap:6px;margin:6px 0 14px}.plink{display:flex;align-items:center;gap:10px;background:#fdf5e6;border:1.5px solid #d9b25c;border-radius:14px;overflow:hidden;cursor:pointer;min-height:44px;padding:0 12px 0 0}.plink img{height:44px;width:80px;object-fit:cover;-webkit-mask-image:linear-gradient(90deg,#000 65%,transparent);mask-image:linear-gradient(90deg,#000 65%,transparent)}.plink span{flex:1;color:#0a2a63;font-size:15px}.plink b{font-weight:600}.plink b[dir=rtl]{display:block;text-align:right;font-family:"Noto Naskh Arabic",serif;font-size:17px}.plink .chev{flex:0;color:#8f5a1a;font-size:22px}.rubr.rubar{direction:rtl;text-align:right;font-family:"Noto Naskh Arabic",serif;font-style:normal;font-size:1em;line-height:1.7}.rubr .rit{direction:ltr;text-align:right;font-family:Lora,serif;font-style:italic;font-size:.8em;opacity:.75}
 .l.it{font-style:italic}.l.rub{color:var(--red);font-style:italic;text-align:center}
+.itext.ar{direction:rtl;text-align:right;font-family:"Noto Naskh Arabic",serif;line-height:1.85}.itext.ar .blk .n{text-align:left}.itext.ar .blk .l{padding-left:0;padding-right:1.2em}.itext.ar .blk.ant{padding:10px 0 10px 12px}.itext.ar .h3{font-family:"Noto Naskh Arabic",serif}
+.ipages .imgerr{padding:18px;border:1px dashed var(--line);border-radius:10px;text-align:center;color:var(--muted)}
+header{transition:transform .25s ease}header.hid{transform:translateY(-110%)}
 .blk.trad{color:var(--muted)}.blk.ant{background:var(--chip);border-radius:12px;padding:10px 12px 10px 0}
 .mk{color:var(--red);font-size:.85em;margin-right:.35em}
 .h3{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:1.6em 0 .7em}
@@ -524,7 +527,7 @@ function renderInniMenu(k){
     `<div class="list">${M.items().map(([a,b,href])=>{const c=AR()&&href.startsWith("i-")?INNI.find(x=>"i-"+x.id===href):null;return c?iBtnAr(c,b?a:""):iBtn(a,b,href)}).join("")}</div>`+
     (M.parent&&IMENU[M.parent]?backBtns([IMENU[M.parent].ar?"العودة إلى "+IMENU[M.parent].ar:"العودة","Torna a: "+IMENU[M.parent].title],"inni-"+M.parent):backBtns(["العودة إلى ترانيم وأناشيد القداس","Torna ai Canti e inni per la messa"],"inni"));
 }
-let iView="testo";try{iView=store.get("iview","testo")}catch(e){}
+let iViewIt="testo",iViewAr="arabo";try{iViewIt=store.get("iview","testo");iViewAr=store.get("iview_ar","arabo")}catch(e){}
 function iBlock(b){
   if(b.head)return `<div class="h3">${esc(b.head)}</div>`;
   const prose=(b.lines||[]).some(l=>l.t.length>70);
@@ -536,24 +539,36 @@ function renderInno(c){
   const ti=c.blocks.findIndex(b=>b.head==="Traduzione");
   const main=ti<0?c.blocks:c.blocks.slice(0,ti);
   const trad=ti<0?[]:c.blocks.slice(ti+1).map(b=>Object.assign({},b,{trad:0,lines:(b.lines||[]).map(l=>Object.assign({},l,{it:0}))}));
-  const tabs=[["testo","Testo · النص"]];if(trad.length)tabs.push(["traduzione","Traduzione · الترجمة"]);if(c.pdfpages&&c.pdfpages.length)tabs.push(["spartito","Spartito · النوتة"]);
-  const v=tabs.some(x=>x[0]===iView)?iView:"testo";
+  const st=IAR[c.id]||[];let si=0;
+  const arb=st.length?main.map(b=>b.head?{head:{"Antifona":"الأَنْتِيفُونَا"}[b.head]||b.head}:Object.assign({},b,{lines:(st[si++]||"").split("\n").map((t,j)=>({t,rub:((b.lines||[])[j]||{}).rub}))})):[];
+  const tabs=[];const tA=["arabo",AR()?"العربية · Arabo":"Arabo · العربية"],tT=["testo",AR()?"الأصل · Testo":"Testo · النص"];
+  if(arb.length&&AR())tabs.push(tA);tabs.push(tT);if(arb.length&&!AR())tabs.push(tA);
+  if(trad.length)tabs.push(["traduzione","Traduzione · الترجمة"]);if(c.pdfpages&&c.pdfpages.length)tabs.push(["spartito","Spartito · النوتة"]);
+  const iView=AR()?iViewAr:iViewIt;
+  const v=tabs.some(x=>x[0]===iView)?iView:tabs[0][0];
   const i=INNI.indexOf(c),prev=INNI[i-1],next=INNI[i+1];
   let h=AR()?`<div class="song inno" dir="ltr"><div dir="rtl" class="iar">${iSubAr(c)?`<div class="isub">${esc(iSubAr(c))}</div>`:""}<h1 class="ititle">${iTit(c)}</h1><div class="meta">${esc(ISEC_AR[c.sec]||c.sec)} · ص ${c.page}</div></div>`
    :`<div class="song inno" dir="ltr">${c.sub?`<div class="isub">${esc(c.sub)}</div>`:""}<h1 class="ititle">${esc(c.title)}</h1><div class="meta">${esc(c.sec)} · pag. ${c.page}</div>`;
   h+=`<div class="tools"><button class="ib" data-act="fs-">A−</button><button class="ib" data-act="fs+">A+</button></div>`;
   if(tabs.length>1)h+=`<div class="tabs">${tabs.map(([k,l])=>`<button class="chip${v===k?" on":""}" data-iv="${k}">${l}</button>`).join("")}</div>`;
-  h+=`<div class="itext ipane" data-p="testo">${main.map(iBlock).join("")}</div><div class="itext ipane" data-p="traduzione">${trad.map(iBlock).join("")}</div><div class="ipages ipane" data-p="spartito" id="ivs"></div>`;
+  h+=`<div class="itext ar ipane" data-p="arabo">${arb.map(iBlock).join("")}</div><div class="itext ipane" data-p="testo">${main.map(iBlock).join("")}</div><div class="itext ipane" data-p="traduzione">${trad.map(iBlock).join("")}</div><div class="ipages ipane" data-p="spartito" id="ivs"></div>`;
   h+=`<div class="inav">${prev?`<div class="ib2n" data-go="i-${prev.id}"><div class="k">${AR()?"‹ السابق":"‹ Precedente"}</div><div class="v">${esc(iTxt(prev))}</div></div>`:"<span></span>"}${next?`<div class="ib2n nx" data-go="i-${next.id}"><div class="k">${AR()?"التالي ›":"Successivo ›"}</div><div class="v">${esc(iTxt(next))}</div></div>`:"<span></span>"}</div>`;
   const lm=lastInni.startsWith("inni-")?IMENU[lastInni.slice(5)]:null;
   h+=backBtns(lm?[lm.ar?"العودة إلى "+lm.ar:"العودة",`Torna a: ${lm.title}`]:["العودة إلى ترانيم وأناشيد القداس","Torna ai Canti e inni per la messa"],lastInni)+`</div>`;
   $("#main").innerHTML=h;window.scrollTo(0,0);
   const show=k=>{document.querySelectorAll(".ipane").forEach(p=>p.classList.toggle("hidden",p.dataset.p!==k));document.querySelectorAll("[data-iv]").forEach(x=>x.classList.toggle("on",x.dataset.iv===k));
-    const vs=$("#ivs");if(k==="spartito"&&!vs.innerHTML)vs.innerHTML=c.pdfpages.map(p=>`<img loading="lazy" alt="Pagina ${p-1}" src="inni/img/${p}.webp">`).join("")};
+    const vs=$("#ivs");if(k==="spartito"&&!vs.innerHTML){vs.innerHTML=c.pdfpages.map(p=>`<img alt="Pagina ${p-1}" src="inni/img/${p}.webp">`).join("");vs.querySelectorAll("img").forEach(im=>im.onerror=()=>{im.outerHTML=`<div class="imgerr">${AR()?"تعذّر تحميل النوتة. تحقّق من الاتصال بالإنترنت.":"Impossibile caricare lo spartito. Controlla la connessione."}</div>`})}};
   show(v);
-  document.querySelectorAll("[data-iv]").forEach(b=>b.onclick=()=>{iView=b.dataset.iv;store.set("iview",iView);show(iView)});
+  document.querySelectorAll("[data-iv]").forEach(b=>b.onclick=()=>{const k=b.dataset.iv;if(AR()){iViewAr=k;store.set("iview_ar",k)}else{iViewIt=k;store.set("iview",k)}show(k)});
 }
-if(HOSTED){fetch("inni/inni.json").then(r=>r.ok?r.json():null).then(a=>{if(a){prepInni(a);buildIMenu();render()}}).catch(()=>{})}
+let IAR={};
+function parseInniAr(t){const o={};let id=null,buf=[];const fl=()=>{if(id)o[id]=buf.join("\n").trim().split(/\n\s*\n/).map(s=>s.trim()).filter(Boolean)};
+  for(const l of t.split(/\r?\n/)){if(/^#/.test(l))continue;const m=l.match(/^===\s*(\S+)/);if(m){fl();id=m[1];buf=[];continue}if(id)buf.push(l)}fl();return o}
+function addInniAr(){if(!INNI)return;INNI.forEach(c=>{const a=IAR[c.id];if(a&&!c._arn){c._arn=1;c._n+="\n"+norm(a.join("\n"))}})}
+if(HOSTED){fetch("inni/inni.json").then(r=>r.ok?r.json():null).then(a=>{if(a){prepInni(a);addInniAr();buildIMenu();render()}}).catch(()=>{});
+  fetch("inni/inni-arabo.txt",{cache:"no-cache"}).then(r=>r.ok?r.text():"").then(t=>{if(t){IAR=parseInniAr(t);addInniAr();if(location.hash.startsWith("#i-"))render()}}).catch(()=>{})}
+(function(){let ly=window.scrollY||0;addEventListener("scroll",()=>{const y=window.scrollY||0,hd=document.querySelector("header");if(!hd)return;
+  if(y<60||y<ly-4)hd.classList.remove("hid");else if(y>ly+4&&!(document.activeElement&&document.activeElement.closest&&document.activeElement.closest("header")))hd.classList.add("hid");ly=y},{passive:true})})();
 function allSongs(){
   const m = new Map();
   BUILTIN.forEach(b=>m.set(b.id,{...b,trad_ar:b.trad_ar||TRAD_B[b.id]||"",src:"book"}));
