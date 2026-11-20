@@ -339,10 +339,12 @@ function backBtns(lab,target){
   const menu=`<button class="tomenu${lab?" tsec":""}" data-menu="1">${bbi("العودة إلى القائمة","Torna al menù")}</button>`;
   return lab?`<button class="tomenu" data-back="${esc(target)}">${bbi(esc(lab[0]),esc(lab[1]))}</button>`+menu:menu}
 function bbi(a,i){return S.lang==="ar"?`<span class="bba" dir="rtl">${a}</span><span class="bbi" dir="ltr">${i}</span>`:`<span dir="rtl">${a}</span> · <span dir="ltr">${i}</span>`}
+const NOTE_AR=[["Testo italiano dal libretto","تُتْلَى صَبَاحًا وَظُهْرًا وَمَسَاءً."],["Il Credo della Messa","قَانُونُ إِيمَانِ القُدَّاسِ، وَيُتْلَى أَيْضًا فِي بِدَايَةِ الوَرْدِيَّةِ."],["Si dice dopo il Gloria","تُقَالُ بَعْدَ «المَجْدُ لِلْآبِ» فِي نِهَايَةِ كُلِّ بَيْتٍ."],["Da Pasqua a Pentecoste","مِنَ الفِصْحِ إِلَى العَنْصَرَةِ تَحُلُّ مَحَلَّ صَلَاةِ التَّبْشِيرِ المَلَائِكِيِّ."]];
 function renderPrayer(p){
   let h=`<div class="song prayer"><h1>${bi(p.ar,p.it)}</h1><div class="meta ptrm" dir="ltr" style="font-family:Lora,serif;font-style:italic;text-align:start">${trH(p.tr)}</div>`;
   h+=`<div class="tools"><button class="ib" dir="ltr" data-act="fs-" aria-label="${t("size")}">A−</button><button class="ib" dir="ltr" data-act="fs+" aria-label="${t("size")}">A+</button></div>`;
-  if(p.note)h+=`<div class="pnote">${esc(p.note)}</div>`;
+  {const nt=S.lang==="ar"?NOTE_AR.find(([k])=>p.note&&p.note.startsWith(k)):null;
+   if(nt)h+=`<div class="pnote" dir="rtl" style="font-family:'Noto Naskh Arabic',serif;font-style:normal;text-align:right">${esc(nt[1])}</div>`;else if(p.note&&S.lang!=="ar")h+=`<div class="pnote">${esc(p.note)}</div>`;}
   let pre="";const rb=sessionStorage.getItem("rosBack");
   if(p.grp==="ros"){sessionStorage.removeItem("rosBack");if(p.id!=="apertura")pre=`<button class="tomenu" data-back="s-apertura">${bbi("العودة إلى بَدْءِ الوَرْدِيَّة","Torna all’inizio del Rosario")}</button>`}
   else if(rb){const q=PRAYERS.find(x=>x.id===rb);if(q)pre=`<button class="tomenu" data-back="s-${rb}">${bbi("العودة إلى الوردية: "+esc(q.ar),"Torna al Rosario: "+esc(q.it))}</button>`}
@@ -520,7 +522,7 @@ function renderInniHome(){
   const christe=fcI(c=>c.name==="CHRISTE CUNCTORUM");const ang=tempoPasq(d)?"regina":"angelus";
   h+=`<div class="list" style="margin-top:12px">`+[`<div class="item ib2" data-go="s-${ang}"><span class="t">${bi(PR[ang].ar,PR[ang].it)}</span><span class="chev">›</span></div>`,christe?iRow(christe):""].join("")+`</div>`;
   h+=`<div class="sechead">${bi("أخرى","Altro")}</div><div class="list">`+IMENU_ALTRO.map(k=>iBtn(IMENU[k].title,IMENU[k].hint,"inni-"+k,IMENU[k].ar)).join("")+`</div>`;
-  h+=`<div class="ifoot" dir="ltr"><a href="https://drive.google.com/drive/folders/1ak3Kv8y1ltFpNXcO46MDwW5sgQFkRUjz" target="_blank" rel="noopener">File audio (Google Drive)</a><br>Testi dal libretto «Inni»</div>`;
+  h+=`${AR()?`<div class="ifoot" dir="rtl"><a href="https://drive.google.com/drive/folders/1ak3Kv8y1ltFpNXcO46MDwW5sgQFkRUjz" target="_blank" rel="noopener">التَّسْجِيلَاتُ الصَّوْتِيَّةُ (Google Drive)</a><br>النُّصُوصُ مِنْ كُتَيِّبِ «Inni»</div>`:`<div class="ifoot" dir="ltr"><a href="https://drive.google.com/drive/folders/1ak3Kv8y1ltFpNXcO46MDwW5sgQFkRUjz" target="_blank" rel="noopener">File audio (Google Drive)</a><br>Testi dal libretto «Inni»</div>`}`;
   $("#main").innerHTML=h+backBtns(["العودة إلى الترانيم","Torna ai canti"],"canti");
 }
 function renderInniMenu(k){
