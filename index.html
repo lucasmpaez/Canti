@@ -133,6 +133,10 @@ html[dir=rtl] .pv .am{display:inline-flex;align-items:baseline;gap:.35em;margin-
 html[dir=rtl] .pv .an{font-family:Lora,serif;color:var(--muted);font-size:.62em;font-weight:600}
 html[dir=rtl] .pv .amk{font-family:Lora,serif;color:var(--accent);font-weight:600;font-size:.85em}
 html[dir=rtl] .pv.cont .a{padding-inline-start:2.65em}
+html[dir=rtl] .pv:not(.short):not(.myst) .a{display:flex;align-items:baseline}
+html[dir=rtl] .pv .am{flex:none}
+html[dir=rtl] .pv .at{flex:1;min-width:0}
+html[dir=rtl] .pv:not(.short):not(.myst) .i{padding-inline-start:4em}
 html[dir=rtl] .prayer .tr,html[dir=rtl] .prayer .tt,html[dir=rtl] .prayer .dtr,html[dir=rtl] .ptr,html[dir=rtl] .ptrm{display:none!important}
 html[dir=rtl] .pv .i{justify-content:flex-end;text-align:right}
 html[dir=rtl] .pv .i .sp,html[dir=rtl] .pv .i .sp2{display:none}
@@ -320,7 +324,7 @@ function prLines(lines){let n=0;return lines.map((l,i)=>{
   const c=l.r==="C",nx=lines[i+1],hc=nx&&nx.r==="C";const mk={V:"℣",R:"℟"}[l.r]||"";if(!c)n++;
   const lead=c?`<span class="sp"></span><span class="sp2"></span>`:`<span class="n">${n}</span>${mk?`<span class="m">${mk}</span>`:""}`;
   const ilead=`<span class="sp"></span>${mk||c?`<span class="sp2"></span>`:""}`;
-  return `<div class="pv${c?" cont":""}${hc?" hascont":""}"><div class="a" lang="ar">${c?"":`<span class="am"><span class="an">${n}</span>${mk?`<span class="amk">${mk}</span>`:""}</span>`}${esc(l.ar)}</div><div class="tr">${lead}<span>${trH(l.tr)}</span></div><div class="i">${ilead}<span>${esc(l.it)}</span></div></div>`}).join("")}
+  return `<div class="pv${c?" cont":""}${hc?" hascont":""}"><div class="a" lang="ar">${c?"":`<span class="am"><span class="an">${n}</span>${mk?`<span class="amk">${mk}</span>`:""}</span>`}<span class="at">${esc(l.ar)}</span></div><div class="tr">${lead}<span>${trH(l.tr)}</span></div><div class="i">${ilead}<span>${esc(l.it)}</span></div></div>`}).join("")}
 function backBtns(lab,target){
   const menu=`<button class="tomenu${lab?" tsec":""}" data-menu="1">${bbi("العودة إلى القائمة","Torna al menù")}</button>`;
   return lab?`<button class="tomenu" data-back="${esc(target)}">${bbi(esc(lab[0]),esc(lab[1]))}</button>`+menu:menu}
