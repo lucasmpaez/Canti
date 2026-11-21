@@ -2639,7 +2639,7 @@ Fadi Naous | فَادِي نَعُّوس
 === Santo | قُدُّوسٌ | arabo | arabo
 قُدُّوسٌ قُدُّوسٌ قُدُّوسٌ
 أَنْتَ الرَّبُّ الْقَوِيُّ
-إِلَهُ السَّمَاوَاتِ وَالْأَرْضِ
+السَّمَاءُ وَالْأَرْضُ
 مَمْلُوءَتَانِ مِنْ مَجْدِكَ الْعَظِيمِ
 
 > هُوشَعْنَا فِي الْأَعَالِي
@@ -2650,8 +2650,8 @@ Fadi Naous | فَادِي نَعُّوس
 
 --- traduzione
 Santo, santo, santo,
-tu sei il Signore potente,
-Dio dei cieli e della terra:
+tu sei il Signore potente.
+Il cielo e la terra
 sono pieni della tua immensa gloria.
 
 > Osanna nell'alto dei cieli.
@@ -2663,7 +2663,7 @@ Benedetto colui che viene nel nome del Signore.
 --- pronuncia
 Quddūsun quddūsun quddūsun
 Anta r-Rabbu l-qawiyyu
-Ilāhu s-samāwāti wa-l-arḍi
+As-samāʾu wa-l-arḍu
 Mamlūʾatāni min majdika l-عaẓīmi
 
 > Hūshaعnā fī l-aعālī
