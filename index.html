@@ -86,7 +86,18 @@ textarea.ltrf{direction:ltr;text-align:left;font-family:Lora,serif}
 .help code{background:var(--chip);padding:0 5px;border-radius:4px;direction:ltr;unicode-bidi:isolate}
 .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
 .btn{border:none;border-radius:10px;padding:10px 16px;cursor:pointer;font-size:15px;background:var(--chip)}
-.btn.pri{background:var(--accent);color:#fff}.btn.dan{background:transparent;color:#b3261e;border:1px solid #b3261e}
+.btn.pri{background:var(--accent);color:#fff}
+.repbtn{display:block;width:100%;margin:30px 0 0;padding:14px;border:2px dashed #b3261e;border-radius:14px;background:transparent;color:#b3261e;font-size:17px;font-weight:600;cursor:pointer}
+.dark .repbtn{border-color:#ff8a80;color:#ff8a80}
+.rep h2{font-size:22px}.rep .rq{font-size:17px;font-weight:600;color:inherit;margin:16px 0 8px}
+.rep .rtit{font-size:17px;margin:0 0 6px;line-height:1.5}
+.rtypes{display:grid;gap:8px}
+.rtype{display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%;padding:13px 14px;border:2px solid var(--line);border-radius:12px;background:var(--card);font-size:17px;cursor:pointer;text-align:start;color:inherit}
+.rtype.on{border-color:var(--accent);background:var(--chip);font-weight:700}
+.rep .fld{font-size:18px}.rep textarea.fld{min-height:130px}
+.rep .row .btn{flex:1 1 100%;font-size:18px;padding:14px;font-weight:600}
+.btn.wa{background:#1fa855;color:#fff}
+.selrep{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:60;border:none;border-radius:999px;padding:14px 22px;background:#b3261e;color:#fff;font-size:18px;font-weight:700;box-shadow:0 6px 18px rgba(0,0,0,.3);cursor:pointer;white-space:nowrap}.btn.dan{background:transparent;color:#b3261e;border:1px solid #b3261e}
 .toast{position:fixed;bottom:88px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:10px;font-size:14px;z-index:30;max-width:90vw;text-align:center}
 .menu a{display:block;padding:12px 4px;border-bottom:1px solid var(--line);cursor:pointer;color:inherit;text-decoration:none}
 .hidden{display:none!important}
@@ -371,6 +382,47 @@ function backBtns(lab,target){
   return lab?`<button class="tomenu" data-back="${esc(target)}">${bbi(esc(lab[0]),esc(lab[1]))}</button>`+menu:menu}
 function bbi(a,i){return S.lang==="ar"?`<span class="bba" dir="rtl">${a}</span><span class="bbi" dir="ltr">${i}</span>`:`<span dir="rtl">${a}</span> · <span dir="ltr">${i}</span>`}
 const NOTE_AR=[["Testo italiano dal libretto","تُتْلَى صَبَاحًا وَظُهْرًا وَمَسَاءً."],["Il Credo della Messa","قَانُونُ إِيمَانِ القُدَّاسِ، وَيُتْلَى أَيْضًا فِي بِدَايَةِ الوَرْدِيَّةِ."],["Si dice dopo il Gloria","تُقَالُ بَعْدَ «المَجْدُ لِلْآبِ» فِي نِهَايَةِ كُلِّ بَيْتٍ."],["Da Pasqua a Pentecoste","مِنَ الفِصْحِ إِلَى العَنْصَرَةِ تَحُلُّ مَحَلَّ صَلَاةِ التَّبْشِيرِ المَلَائِكِيِّ."]];
+/* ---------- segnala un errore ---------- */
+// Dove arrivano le segnalazioni. wa: numero WhatsApp con prefisso, solo cifre (es. "393331234567"). mail: indirizzo email.
+const SEGNALA={wa:"",mail:""};
+const RTYPES=[["gram","قَوَاعِدُ اللُّغَةِ العَرَبِيَّةِ","Grammatica araba"],["parola","كَلِمَةٌ خَاطِئَةٌ","Parola sbagliata"],["translit","النُّطْقُ بِالحُرُوفِ اللَّاتِينِيَّةِ","Traslitterazione"],["trad","التَّرْجَمَةُ الإِيطَالِيَّةُ","Traduzione italiana"],["altro","شَيْءٌ آخَرُ","Altro"]];
+function repBtn(){return `<button class="repbtn" data-rep="1">⚑ ${bbi("الإِبْلَاغُ عَنْ خَطَأٍ","Segnala un errore")}</button>`}
+function openReport(sel){
+  const r=route(),id=r.song||r.hymn;let tit="",ref="";
+  if(r.song&&PR[r.song]){const p=PR[r.song];tit=p.it+" · "+p.ar;ref="Preghiera"}
+  else if(r.song){const s=allSongs().find(x=>x.id===r.song);if(!s)return;tit=(s.n?"№ "+s.n+" · ":"")+s.title+(s.title_ar&&s.title_ar!==s.title?" · "+s.title_ar:"");ref="Canto"}
+  else if(r.hymn){const c=(INNI||[]).find(x=>x.id===r.hymn);if(!c)return;tit=c.title+(INNI_AR[c.id]?" · "+INNI_AR[c.id]:"")+(c.page?" (pag. "+c.page+")":"");ref="Inno"}
+  else return;
+  let ty=S.tab==="translit"?"translit":S.tab==="trad"?"trad":"";
+  const L=(a,i)=>S.lang==="ar"?`<span dir="rtl">${a}</span><br><span dir="ltr" style="font-size:.85em;opacity:.8">${i}</span>`:`<span dir="ltr">${i}</span> · <span dir="rtl">${a}</span>`;
+  $("#panel").innerHTML=`<div class="rep"><h2>⚑ ${L("الإِبْلَاغُ عَنْ خَطَأٍ","Segnala un errore")}</h2>
+   <p class="rtit" dir="auto"><b>${esc(tit)}</b></p>
+   <div class="rq">1. ${L("مَا نَوْعُ الخَطَأِ؟","Che tipo di errore?")}</div>
+   <div class="rtypes">${RTYPES.map(([k,a,i])=>`<button class="rtype${ty===k?" on":""}" data-rt="${k}"><span dir="ltr">${i}</span><span dir="rtl">${a}</span></button>`).join("")}</div>
+   <div class="rq">2. ${L("أَيْنَ الخَطَأُ؟ (رَقْمُ البَيْتِ أَوِ الكَلِمَاتُ الأُولَى)","Dove? (numero del verso o le prime parole)")}</div>
+   <input class="fld" id="r-dove" dir="auto" value="${esc(sel||"")}">
+   <div class="rq">3. ${L("مَا الخَطَأُ وَكَيْفَ يَجِبُ أَنْ يَكُونَ؟","Cosa è sbagliato e come dovrebbe essere?")}</div>
+   <textarea class="fld" id="r-txt" dir="auto"></textarea>
+   <div class="rq">${L("اسْمُكَ (اخْتِيَارِيّ)","Il tuo nome (facoltativo)")}</div>
+   <input class="fld" id="r-nome" dir="auto" value="${esc(store.get("repName",""))}">
+   <div class="row">${SEGNALA.wa||!SEGNALA.mail?`<button class="btn wa" id="r-wa">${L("إِرْسَال عَبْرَ وَاتْسَاب","Invia con WhatsApp")}</button>`:""}${SEGNALA.mail?`<button class="btn pri" id="r-mail">${L("إِرْسَال بِالبَرِيدِ الإِلِكْتُرُونِيّ","Invia per email")}</button>`:""}<button class="btn" id="r-close">${t("cancel")}</button></div></div>`;
+  $("#sheet").classList.remove("hidden");$("#r-close").onclick=closeSheet;
+  $("#panel").querySelectorAll("[data-rt]").forEach(b=>b.onclick=()=>{ty=b.dataset.rt;$("#panel").querySelectorAll("[data-rt]").forEach(x=>x.classList.toggle("on",x===b))});
+  const msg=()=>{const tx=$("#r-txt").value.trim();if(!tx){toast(S.lang==="ar"?"اُكْتُبْ مَا الخَطَأُ":"Scrivi qual è l’errore");$("#r-txt").focus();return null}
+    const nome=$("#r-nome").value.trim();store.set("repName",nome);const T0=RTYPES.find(x=>x[0]===ty);
+    return ["⚑ Errore nell’app Canti · خطأ في التطبيق",ref+": "+tit,"Tipo: "+(T0?T0[2]+" · "+T0[1]:"—"),"Dove: "+($("#r-dove").value.trim()||"—"),"","Errore e correzione:",tx,"",nome?"Da: "+nome:"",APP_URL+"#"+(r.hymn?"i-":"s-")+id].filter((x,i,a)=>x!==""||a[i-1]!=="").join("\n")};
+  const go=u=>{closeSheet();toast(S.lang==="ar"?"شُكْرًا!":"Grazie!");location.href=u};
+  const w=$("#r-wa");if(w)w.onclick=()=>{const m=msg();if(m)go("https://wa.me/"+SEGNALA.wa+"?text="+encodeURIComponent(m))};
+  const e=$("#r-mail");if(e)e.onclick=()=>{const m=msg();if(m)go("mailto:"+SEGNALA.mail+"?subject="+encodeURIComponent("Errore: "+tit)+"&body="+encodeURIComponent(m))};
+}
+/* selezionando una parola appare il pulsante «Segnala» (il menu copia/taglia del telefono non si può modificare da una pagina web) */
+let selTxt="";
+document.addEventListener("selectionchange",()=>{const sl=getSelection(),tx=String(sl||"").trim().replace(/\s+/g," ");
+  const ok=tx&&tx.length<300&&sl.anchorNode&&$("#main").contains(sl.anchorNode)&&(route().song||route().hymn)&&$("#sheet").classList.contains("hidden");
+  let b=document.getElementById("selrep");
+  if(!ok){if(b)b.remove();return}
+  selTxt=tx;if(!b){b=document.createElement("button");b.id="selrep";b.className="selrep";b.innerHTML="⚑ "+(S.lang==="ar"?"الإِبْلَاغُ عَنْ خَطَأٍ":"Segnala errore · خطأ");
+    b.addEventListener("pointerdown",e=>e.preventDefault());b.onclick=()=>{b.remove();const t0=selTxt;try{getSelection().removeAllRanges()}catch(e){}openReport(t0)};document.body.appendChild(b)}});
 function renderPrayer(p){
   let h=`<div class="song prayer"><h1>${bi(p.ar,p.it)}</h1><div class="meta ptrm" dir="ltr" style="font-family:Lora,serif;font-style:italic;text-align:start">${trH(p.tr)}</div>`;
   h+=`<div class="tools"><button class="ib" dir="ltr" data-act="fs-" aria-label="${t("size")}">A−</button><button class="ib" dir="ltr" data-act="fs+" aria-label="${t("size")}">A+</button></div>`;
@@ -379,7 +431,7 @@ function renderPrayer(p){
   let pre="";const rb=sessionStorage.getItem("rosBack");
   if(p.grp==="ros"){sessionStorage.removeItem("rosBack");if(p.id!=="apertura")pre=`<button class="tomenu" data-back="s-apertura">${bbi("العودة إلى بَدْءِ الوَرْدِيَّة","Torna all’inizio del Rosario")}</button>`}
   else if(rb){const q=PRAYERS.find(x=>x.id===rb);if(q)pre=`<button class="tomenu" data-back="s-${rb}">${bbi("العودة إلى الوردية: "+esc(q.ar),"Torna al Rosario: "+esc(q.it))}</button>`}
-  $("#main").innerHTML=h+prLines(p.lines)+pre+backBtns(p.grp==="ros"?["العودة إلى قائمة الوردية","Torna all’elenco del Rosario"]:["العودة إلى الصلوات","Torna alle preghiere"],p.grp?"preghiere#g-"+p.grp:"preghiere")+"</div>"; window.scrollTo(0,0);
+  $("#main").innerHTML=h+prLines(p.lines)+repBtn()+pre+backBtns(p.grp==="ros"?["العودة إلى قائمة الوردية","Torna all’elenco del Rosario"]:["العودة إلى الصلوات","Torna alle preghiere"],p.grp?"preghiere#g-"+p.grp:"preghiere")+"</div>"; window.scrollTo(0,0);
 }
 function prayerRows(list,bar){return `<div class="list prl">`+list.map(p=>`<div class="item pr" data-id="${esc(p.id)}"><span class="t">${bi(p.ar,p.it)}<span class="ptr">${trH(p.tr)}</span></span><span class="chev">›</span></div>`).join("")+(bar?`<div class="item prbar" data-pl="1"><span class="ic">❧</span><span class="t">${bi("صَلَوَات","Preghiere")}</span><span class="count">${PRAYERS.length-1}</span><span class="chev">›</span></div>`+(INNI?`<div class="item prbar" data-go="inni"><span class="ic">♪</span><span class="t">${bi("تَرَانِيمُ وَأَنَاشِيدُ لِلْقُدَّاس","Canti e inni per la messa")}</span><span class="count">${INNI.length}</span><span class="chev">›</span></div>`:""):"")+`</div>`}
 function rubLinks(l){if(!l.links)return "";return `<div class="plinks">`+l.links.map(id=>{const q=PRAYERS.find(x=>x.id===id);if(!q)return "";const th=null;return `<div class="item plink" data-id="${id}" dir="ltr">${th?`<img src="${th}" alt="">`:""}<span>${S.lang==="ar"?`<b dir="rtl">${esc(q.ar)}</b>`:`<b>${esc(q.it)}</b>`}</span><span class="chev">›</span></div>`}).join("")+`</div>`}
@@ -589,7 +641,7 @@ function renderInno(c){
   h+=`<div class="itext ar ipane" data-p="arabo">${arb.map(iBlock).join("")}</div><div class="itext ipane" data-p="testo">${main.map(iBlock).join("")}</div><div class="itext ipane" data-p="traduzione">${trad.map(iBlock).join("")}</div><div class="ipages ipane" data-p="spartito" id="ivs"></div>`;
   h+=`<div class="inav">${prev?`<div class="ib2n" data-go="i-${prev.id}"><div class="k">${AR()?"‹ السابق":"‹ Precedente"}</div><div class="v">${esc(iTxt(prev))}</div></div>`:"<span></span>"}${next?`<div class="ib2n nx" data-go="i-${next.id}"><div class="k">${AR()?"التالي ›":"Successivo ›"}</div><div class="v">${esc(iTxt(next))}</div></div>`:"<span></span>"}</div>`;
   const lm=lastInni.startsWith("inni-")?IMENU[lastInni.slice(5)]:null;
-  h+=backBtns(lm?[lm.ar?"العودة إلى "+lm.ar:"العودة",`Torna a: ${lm.title}`]:["العودة إلى ترانيم وأناشيد القداس","Torna ai Canti e inni per la messa"],lastInni)+`</div>`;
+  h+=repBtn()+backBtns(lm?[lm.ar?"العودة إلى "+lm.ar:"العودة",`Torna a: ${lm.title}`]:["العودة إلى ترانيم وأناشيد القداس","Torna ai Canti e inni per la messa"],lastInni)+`</div>`;
   $("#main").innerHTML=h;window.scrollTo(0,0);
   const show=k=>{document.querySelectorAll(".ipane").forEach(p=>p.classList.toggle("hidden",p.dataset.p!==k));document.querySelectorAll("[data-iv]").forEach(x=>x.classList.toggle("on",x.dataset.iv===k));
     const vs=$("#ivs");if(k==="spartito"&&!vs.innerHTML){vs.innerHTML=c.pdfpages.map(p=>`<img alt="Pagina ${p-1}" src="inni/img/${p}.webp">`).join("");vs.querySelectorAll("img").forEach(im=>im.onerror=()=>{im.outerHTML=`<div class="imgerr">${AR()?"تعذّر تحميل النوتة. تحقّق من الاتصال بالإنترنت.":"Impossibile caricare lo spartito. Controlla la connessione."}</div>`})}};
@@ -784,7 +836,7 @@ function renderSong(s){
   if(S.tab==="trad") h+=`<div class="body ${sAr?"ltr":"rtl"} nochords">${bodyHTML(s.trad_ar,0,false)}</div>`;
   if(S.tab==="note") h+=`<div class="note">${esc(s.note_ar)}</div>`;
   const su=SUB[subOf(s)];
-  $("#main").innerHTML=h+(S.q?backBtns(["العودة إلى الترانيم","Torna ai canti"],"canti"):backBtns(["العودة إلى "+su.ar,"Torna a: "+su.it],"sec-"+su.id))+"</div>"; window.scrollTo(0,0);
+  $("#main").innerHTML=h+repBtn()+(S.q?backBtns(["العودة إلى الترانيم","Torna ai canti"],"canti"):backBtns(["العودة إلى "+su.ar,"Torna a: "+su.it],"sec-"+su.id))+"</div>"; window.scrollTo(0,0);
 }
 
 /* ---------- editor ---------- */
@@ -897,6 +949,7 @@ $("#main").onclick=e=>{
   const go=e.target.closest("[data-go]");if(go){if(go.dataset.go.startsWith("s-")&&route().inni)S.from=location.hash.slice(1);location.hash=go.dataset.go;return}
   const sc=e.target.closest("[data-sec]");if(sc){location.hash="sec-"+sc.dataset.sec;return}
   const it=e.target.closest(".item");if(it){if(it.classList.contains("plink")){const cur=location.hash.slice(3);const cp=PRAYERS.find(x=>x.id===cur);if(cp&&cp.grp==="ros")sessionStorage.setItem("rosBack",cur)}S.transpose=0;S.tab="text";location.hash="s-"+it.dataset.id;return}
+  if(e.target.closest("[data-rep]")){openReport("");return}
   const tb=e.target.closest("[data-tab]");if(tb){S.tab=tb.dataset.tab;render();return}
   const a=e.target.closest("[data-act]");if(!a)return;const id=route().song;const s=allSongs().find(x=>x.id===id);
   switch(a.dataset.act){
