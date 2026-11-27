@@ -399,18 +399,20 @@ function openReport(sel){
    <p class="rtit" dir="auto"><b>${esc(tit)}</b></p>
    <div class="rq">1. ${L("مَا نَوْعُ الخَطَأِ؟","Che tipo di errore?")}</div>
    <div class="rtypes">${RTYPES.map(([k,a,i])=>`<button class="rtype${ty===k?" on":""}" data-rt="${k}"><span dir="ltr">${i}</span><span dir="rtl">${a}</span></button>`).join("")}</div>
-   <div class="rq">2. ${L("أَيْنَ الخَطَأُ؟ (رَقْمُ البَيْتِ أَوِ الكَلِمَاتُ الأُولَى)","Dove? (numero del verso o le prime parole)")}</div>
+   <div class="rq">2. ${L("مَا المَكْتُوبُ الآنَ؟ (الكَلِمَةُ الخَاطِئَةُ أَوْ رَقْمُ البَيْتِ)","Cosa c’è scritto ora? (la parola sbagliata o il numero del verso)")}</div>
    <input class="fld" id="r-dove" dir="auto" value="${esc(sel||"")}">
-   <div class="rq">3. ${L("مَا الخَطَأُ وَكَيْفَ يَجِبُ أَنْ يَكُونَ؟","Cosa è sbagliato e come dovrebbe essere?")}</div>
-   <textarea class="fld" id="r-txt" dir="auto"></textarea>
+   <div class="rq">3. ${L("كَيْفَ يَجِبُ أَنْ يَكُونَ؟ (التَّصْحِيحُ المُقْتَرَحُ)","Come dovrebbe essere? (la correzione)")} *</div>
+   <textarea class="fld" id="r-txt" dir="auto" style="min-height:90px"></textarea>
+   <div class="rq">${L("مُلَاحَظَةٌ (اخْتِيَارِيّ)","Spiegazione (facoltativa)")}</div>
+   <textarea class="fld" id="r-nota" dir="auto" style="min-height:70px"></textarea>
    <div class="rq">${L("اسْمُكَ (اخْتِيَارِيّ)","Il tuo nome (facoltativo)")}</div>
    <input class="fld" id="r-nome" dir="auto" value="${esc(store.get("repName",""))}">
    <div class="row">${SEGNALA.wa||!SEGNALA.mail?`<button class="btn wa" id="r-wa">${L("إِرْسَال عَبْرَ وَاتْسَاب","Invia con WhatsApp")}</button>`:""}${SEGNALA.mail?`<button class="btn pri" id="r-mail">${L("إِرْسَال بِالبَرِيدِ الإِلِكْتُرُونِيّ","Invia per email")}</button>`:""}<button class="btn" id="r-close">${t("cancel")}</button></div></div>`;
   $("#sheet").classList.remove("hidden");$("#r-close").onclick=closeSheet;
   $("#panel").querySelectorAll("[data-rt]").forEach(b=>b.onclick=()=>{ty=b.dataset.rt;$("#panel").querySelectorAll("[data-rt]").forEach(x=>x.classList.toggle("on",x===b))});
-  const msg=()=>{const tx=$("#r-txt").value.trim();if(!tx){toast(S.lang==="ar"?"اُكْتُبْ مَا الخَطَأُ":"Scrivi qual è l’errore");$("#r-txt").focus();return null}
+  const msg=()=>{const tx=$("#r-txt").value.trim();if(!tx){toast(S.lang==="ar"?"اُكْتُبِ التَّصْحِيحَ المُقْتَرَحَ":"Scrivi la correzione proposta");$("#r-txt").focus();return null}
     const nome=$("#r-nome").value.trim();store.set("repName",nome);const T0=RTYPES.find(x=>x[0]===ty);
-    return ["⚑ Errore nell’app Canti · خطأ في التطبيق",ref+": "+tit,"Tipo: "+(T0?T0[2]+" · "+T0[1]:"—"),"Dove: "+($("#r-dove").value.trim()||"—"),"","Errore e correzione:",tx,"",nome?"Da: "+nome:"",APP_URL+"#"+(r.hymn?"i-":"s-")+id].filter((x,i,a)=>x!==""||a[i-1]!=="").join("\n")};
+    return ["⚑ Errore nell’app Canti · خطأ في التطبيق",ref+": "+tit,"Tipo: "+(T0?T0[2]+" · "+T0[1]:"—"),"Testo attuale: "+($("#r-dove").value.trim()||"—"),"","✏️ Correzione proposta:",tx,"",$("#r-nota").value.trim()?"Spiegazione: "+$("#r-nota").value.trim():"",nome?"Da: "+nome:"",APP_URL+"#"+(r.hymn?"i-":"s-")+id].filter((x,i,a)=>x!==""||a[i-1]!=="").join("\n")};
   const go=u=>{closeSheet();toast(S.lang==="ar"?"شُكْرًا!":"Grazie!");location.href=u};
   const w=$("#r-wa");if(w)w.onclick=()=>{const m=msg();if(m)go("https://wa.me/"+SEGNALA.wa+"?text="+encodeURIComponent(m))};
   const e=$("#r-mail");if(e)e.onclick=()=>{const m=msg();if(m)go("mailto:"+SEGNALA.mail+"?subject="+encodeURIComponent("Errore: "+tit)+"&body="+encodeURIComponent(m))};
