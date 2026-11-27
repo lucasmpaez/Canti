@@ -382,7 +382,14 @@ function bbi(a,i){return S.lang==="ar"?`<span class="bba" dir="rtl">${a}</span><
 const NOTE_AR=[["Testo italiano dal libretto","تُتْلَى صَبَاحًا وَظُهْرًا وَمَسَاءً."],["Il Credo della Messa","قَانُونُ إِيمَانِ القُدَّاسِ، وَيُتْلَى أَيْضًا فِي بِدَايَةِ الوَرْدِيَّةِ."],["Si dice dopo il Gloria","تُقَالُ بَعْدَ «المَجْدُ لِلْآبِ» فِي نِهَايَةِ كُلِّ بَيْتٍ."],["Da Pasqua a Pentecoste","مِنَ الفِصْحِ إِلَى العَنْصَرَةِ تَحُلُّ مَحَلَّ صَلَاةِ التَّبْشِيرِ المَلَائِكِيِّ."]];
 /* ---------- segnala un errore ---------- */
 // Dove arrivano le segnalazioni. wa: numero WhatsApp con prefisso, solo cifre (es. "393331234567"). mail: indirizzo email.
-const SEGNALA={wa:"963996412935",mail:""};
+// form: indirizzo ".../formResponse" del modulo Google «Segnalazioni Canti»; entry: "entry.NNN" della domanda «Segnalazione».
+// Con form impostato le segnalazioni vanno nel foglio Google collegato (senza WhatsApp); altrimenti si usa WhatsApp.
+const SEGNALA={wa:"963996412935",mail:"",form:"",entry:""};
+function repSend(m){const q=store.get("repQueue",[]);q.push(m);store.set("repQueue",q);repFlush()}
+async function repFlush(){if(!SEGNALA.form)return;let q=store.get("repQueue",[]);while(q.length){const fd=new URLSearchParams();fd.set(SEGNALA.entry,q[0]);
+  try{await fetch(SEGNALA.form,{method:"POST",mode:"no-cors",body:fd})}catch(e){return}
+  q=store.get("repQueue",[]);q.shift();store.set("repQueue",q)}}
+addEventListener("online",repFlush);setTimeout(repFlush,3000);
 const RTYPES=[["gram","قَوَاعِدُ اللُّغَةِ العَرَبِيَّةِ","Grammatica araba"],["parola","كَلِمَةٌ خَاطِئَةٌ","Parola sbagliata"],["translit","النُّطْقُ بِالحُرُوفِ اللَّاتِينِيَّةِ","Traslitterazione"],["trad","التَّرْجَمَةُ الإِيطَالِيَّةُ","Traduzione italiana"],["altro","شَيْءٌ آخَرُ","Altro"]];
 function openReport(sel){
   const r=route(),id=r.song||r.hymn;let tit="",ref="",tv="";
@@ -404,13 +411,14 @@ function openReport(sel){
    <textarea class="fld" id="r-nota" dir="auto" style="min-height:70px"></textarea>
    <div class="rq">${L("اسْمُكَ (اخْتِيَارِيّ)","Il tuo nome (facoltativo)")}</div>
    <input class="fld" id="r-nome" dir="auto" value="${esc(store.get("repName",""))}">
-   <div class="row">${SEGNALA.wa||!SEGNALA.mail?`<button class="btn wa" id="r-wa">${L("إِرْسَال عَبْرَ وَاتْسَاب","Invia con WhatsApp")}</button>`:""}${SEGNALA.mail?`<button class="btn pri" id="r-mail">${L("إِرْسَال بِالبَرِيدِ الإِلِكْتُرُونِيّ","Invia per email")}</button>`:""}<button class="btn" id="r-close">${t("cancel")}</button></div></div>`;
+   <div class="row">${SEGNALA.form?`<button class="btn pri" id="r-form">${L("إِرْسَال","Invia")}</button>`:SEGNALA.wa||!SEGNALA.mail?`<button class="btn wa" id="r-wa">${L("إِرْسَال عَبْرَ وَاتْسَاب","Invia con WhatsApp")}</button>`:""}${!SEGNALA.form&&SEGNALA.mail?`<button class="btn pri" id="r-mail">${L("إِرْسَال بِالبَرِيدِ الإِلِكْتُرُونِيّ","Invia per email")}</button>`:""}<button class="btn" id="r-close">${t("cancel")}</button></div></div>`;
   $("#sheet").classList.remove("hidden");$("#r-close").onclick=closeSheet;
   $("#panel").querySelectorAll("[data-rt]").forEach(b=>b.onclick=()=>{ty=b.dataset.rt;$("#panel").querySelectorAll("[data-rt]").forEach(x=>x.classList.toggle("on",x===b))});
   const msg=()=>{const tx=$("#r-txt").value.trim();if(!tx){toast(S.lang==="ar"?"اُكْتُبِ التَّصْحِيحَ المُقْتَرَحَ":"Scrivi la correzione proposta");$("#r-txt").focus();return null}
     const nome=$("#r-nome").value.trim();store.set("repName",nome);const T0=RTYPES.find(x=>x[0]===ty);
     return ["⚑ Errore nell’app Canti · خطأ في التطبيق",ref+": "+tit,"Tipo: "+(T0?T0[2]+" · "+T0[1]:"—"),"Testo attuale: "+($("#r-dove").value.trim()||"—"),"","✏️ Correzione proposta:",tx,"",$("#r-nota").value.trim()?"Spiegazione: "+$("#r-nota").value.trim():"",nome?"Da: "+nome:"",APP_URL+"#"+(r.hymn?"i-":"s-")+id].filter((x,i,a)=>x!==""||a[i-1]!=="").join("\n")};
   const go=u=>{closeSheet();toast(S.lang==="ar"?"شُكْرًا!":"Grazie!");location.href=u};
+  const f=$("#r-form");if(f)f.onclick=()=>{const m=msg();if(m){repSend(m);closeSheet();toast(S.lang==="ar"?"شُكْرًا! وَصَلَ التَّبْلِيغُ":"Grazie! Segnalazione inviata")}};
   const w=$("#r-wa");if(w)w.onclick=()=>{const m=msg();if(m)go("https://wa.me/"+SEGNALA.wa+"?text="+encodeURIComponent(m))};
   const e=$("#r-mail");if(e)e.onclick=()=>{const m=msg();if(m)go("mailto:"+SEGNALA.mail+"?subject="+encodeURIComponent("Errore: "+tit)+"&body="+encodeURIComponent(m))};
 }
