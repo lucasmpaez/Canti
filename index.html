@@ -87,8 +87,6 @@ textarea.ltrf{direction:ltr;text-align:left;font-family:Lora,serif}
 .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
 .btn{border:none;border-radius:10px;padding:10px 16px;cursor:pointer;font-size:15px;background:var(--chip)}
 .btn.pri{background:var(--accent);color:#fff}
-.repbtn{display:block;width:100%;margin:30px 0 0;padding:14px;border:2px dashed #b3261e;border-radius:14px;background:transparent;color:#b3261e;font-size:17px;font-weight:600;cursor:pointer}
-.dark .repbtn{border-color:#ff8a80;color:#ff8a80}
 .rep h2{font-size:22px}.rep .rq{font-size:17px;font-weight:600;color:inherit;margin:16px 0 8px}
 .rep .rtit{font-size:17px;margin:0 0 6px;line-height:1.5}
 .rtypes{display:grid;gap:8px}
@@ -386,19 +384,18 @@ const NOTE_AR=[["Testo italiano dal libretto","تُتْلَى صَبَاحًا �
 // Dove arrivano le segnalazioni. wa: numero WhatsApp con prefisso, solo cifre (es. "393331234567"). mail: indirizzo email.
 const SEGNALA={wa:"963996412935",mail:""};
 const RTYPES=[["gram","قَوَاعِدُ اللُّغَةِ العَرَبِيَّةِ","Grammatica araba"],["parola","كَلِمَةٌ خَاطِئَةٌ","Parola sbagliata"],["translit","النُّطْقُ بِالحُرُوفِ اللَّاتِينِيَّةِ","Traslitterazione"],["trad","التَّرْجَمَةُ الإِيطَالِيَّةُ","Traduzione italiana"],["altro","شَيْءٌ آخَرُ","Altro"]];
-function repBtn(){return `<button class="repbtn" data-rep="1">⚑ ${bbi("الإِبْلَاغُ عَنْ خَطَأٍ","Segnala un errore")}</button>`}
 function openReport(sel){
-  const r=route(),id=r.song||r.hymn;let tit="",ref="";
-  if(r.song&&PR[r.song]){const p=PR[r.song];tit=p.it+" · "+p.ar;ref="Preghiera"}
-  else if(r.song){const s=allSongs().find(x=>x.id===r.song);if(!s)return;tit=(s.n?"№ "+s.n+" · ":"")+s.title+(s.title_ar&&s.title_ar!==s.title?" · "+s.title_ar:"");ref="Canto"}
-  else if(r.hymn){const c=(INNI||[]).find(x=>x.id===r.hymn);if(!c)return;tit=c.title+(INNI_AR[c.id]?" · "+INNI_AR[c.id]:"")+(c.page?" (pag. "+c.page+")":"");ref="Inno"}
+  const r=route(),id=r.song||r.hymn;let tit="",ref="",tv="";
+  if(r.song&&PR[r.song]){const p=PR[r.song];tit=p.it+" · "+p.ar;ref="Preghiera";tv=AR()?p.ar:p.it}
+  else if(r.song){const s=allSongs().find(x=>x.id===r.song);if(!s)return;tit=(s.n?"№ "+s.n+" · ":"")+s.title+(s.title_ar&&s.title_ar!==s.title?" · "+s.title_ar:"");ref="Canto";tv=AR()&&s.title_ar?s.title_ar:s.title}
+  else if(r.hymn){const c=(INNI||[]).find(x=>x.id===r.hymn);if(!c)return;tit=c.title+(INNI_AR[c.id]?" · "+INNI_AR[c.id]:"")+(c.page?" (pag. "+c.page+")":"");ref="Inno";tv=AR()&&INNI_AR[c.id]?INNI_AR[c.id]:c.title}
   else return;
   let ty=S.tab==="translit"?"translit":S.tab==="trad"?"trad":"";
-  const L=(a,i)=>S.lang==="ar"?`<span dir="rtl">${a}</span><br><span dir="ltr" style="font-size:.85em;opacity:.8">${i}</span>`:`<span dir="ltr">${i}</span> · <span dir="rtl">${a}</span>`;
-  $("#panel").innerHTML=`<div class="rep"><h2>⚑ ${L("الإِبْلَاغُ عَنْ خَطَأٍ","Segnala un errore")}</h2>
-   <p class="rtit" dir="auto"><b>${esc(tit)}</b></p>
+  const AR0=S.lang==="ar",L=(a,i)=>AR0?a:i;
+  $("#panel").innerHTML=`<div class="rep" dir="${AR0?"rtl":"ltr"}"><h2>⚑ ${L("الإِبْلَاغُ عَنْ خَطَأٍ","Segnala un errore")}</h2>
+   <p class="rtit" dir="auto"><b>${esc(tv)}</b></p>
    <div class="rq">1. ${L("مَا نَوْعُ الخَطَأِ؟","Che tipo di errore?")}</div>
-   <div class="rtypes">${RTYPES.map(([k,a,i])=>`<button class="rtype${ty===k?" on":""}" data-rt="${k}"><span dir="ltr">${i}</span><span dir="rtl">${a}</span></button>`).join("")}</div>
+   <div class="rtypes">${RTYPES.map(([k,a,i])=>`<button class="rtype${ty===k?" on":""}" data-rt="${k}"><span>${L(a,i)}</span></button>`).join("")}</div>
    <div class="rq">2. ${L("مَا المَكْتُوبُ الآنَ؟ (الكَلِمَةُ الخَاطِئَةُ أَوْ رَقْمُ البَيْتِ)","Cosa c’è scritto ora? (la parola sbagliata o il numero del verso)")}</div>
    <input class="fld" id="r-dove" dir="auto" value="${esc(sel||"")}">
    <div class="rq">3. ${L("كَيْفَ يَجِبُ أَنْ يَكُونَ؟ (التَّصْحِيحُ المُقْتَرَحُ)","Come dovrebbe essere? (la correzione)")} *</div>
@@ -423,7 +420,7 @@ document.addEventListener("selectionchange",()=>{const sl=getSelection(),tx=Stri
   const ok=tx&&tx.length<300&&sl.anchorNode&&$("#main").contains(sl.anchorNode)&&(route().song||route().hymn)&&$("#sheet").classList.contains("hidden");
   let b=document.getElementById("selrep");
   if(!ok){if(b)b.remove();return}
-  selTxt=tx;if(!b){b=document.createElement("button");b.id="selrep";b.className="selrep";b.innerHTML="⚑ "+(S.lang==="ar"?"الإِبْلَاغُ عَنْ خَطَأٍ":"Segnala errore · خطأ");
+  selTxt=tx;if(!b){b=document.createElement("button");b.id="selrep";b.className="selrep";b.innerHTML="⚑ "+(S.lang==="ar"?"الإِبْلَاغُ عَنْ خَطَأٍ":"Segnala un errore");
     b.addEventListener("pointerdown",e=>e.preventDefault());b.onclick=()=>{b.remove();const t0=selTxt;try{getSelection().removeAllRanges()}catch(e){}openReport(t0)};document.body.appendChild(b)}});
 function renderPrayer(p){
   let h=`<div class="song prayer"><h1>${bi(p.ar,p.it)}</h1><div class="meta ptrm" dir="ltr" style="font-family:Lora,serif;font-style:italic;text-align:start">${trH(p.tr)}</div>`;
@@ -433,7 +430,7 @@ function renderPrayer(p){
   let pre="";const rb=sessionStorage.getItem("rosBack");
   if(p.grp==="ros"){sessionStorage.removeItem("rosBack");if(p.id!=="apertura")pre=`<button class="tomenu" data-back="s-apertura">${bbi("العودة إلى بَدْءِ الوَرْدِيَّة","Torna all’inizio del Rosario")}</button>`}
   else if(rb){const q=PRAYERS.find(x=>x.id===rb);if(q)pre=`<button class="tomenu" data-back="s-${rb}">${bbi("العودة إلى الوردية: "+esc(q.ar),"Torna al Rosario: "+esc(q.it))}</button>`}
-  $("#main").innerHTML=h+prLines(p.lines)+repBtn()+pre+backBtns(p.grp==="ros"?["العودة إلى قائمة الوردية","Torna all’elenco del Rosario"]:["العودة إلى الصلوات","Torna alle preghiere"],p.grp?"preghiere#g-"+p.grp:"preghiere")+"</div>"; window.scrollTo(0,0);
+  $("#main").innerHTML=h+prLines(p.lines)+pre+backBtns(p.grp==="ros"?["العودة إلى قائمة الوردية","Torna all’elenco del Rosario"]:["العودة إلى الصلوات","Torna alle preghiere"],p.grp?"preghiere#g-"+p.grp:"preghiere")+"</div>"; window.scrollTo(0,0);
 }
 function prayerRows(list,bar){return `<div class="list prl">`+list.map(p=>`<div class="item pr" data-id="${esc(p.id)}"><span class="t">${bi(p.ar,p.it)}<span class="ptr">${trH(p.tr)}</span></span><span class="chev">›</span></div>`).join("")+(bar?`<div class="item prbar" data-pl="1"><span class="ic">❧</span><span class="t">${bi("صَلَوَات","Preghiere")}</span><span class="count">${PRAYERS.length-1}</span><span class="chev">›</span></div>`+(INNI?`<div class="item prbar" data-go="inni"><span class="ic">♪</span><span class="t">${bi("تَرَانِيمُ وَأَنَاشِيدُ لِلْقُدَّاس","Canti e inni per la messa")}</span><span class="count">${INNI.length}</span><span class="chev">›</span></div>`:""):"")+`</div>`}
 function rubLinks(l){if(!l.links)return "";return `<div class="plinks">`+l.links.map(id=>{const q=PRAYERS.find(x=>x.id===id);if(!q)return "";const th=null;return `<div class="item plink" data-id="${id}" dir="ltr">${th?`<img src="${th}" alt="">`:""}<span>${S.lang==="ar"?`<b dir="rtl">${esc(q.ar)}</b>`:`<b>${esc(q.it)}</b>`}</span><span class="chev">›</span></div>`}).join("")+`</div>`}
@@ -643,7 +640,7 @@ function renderInno(c){
   h+=`<div class="itext ar ipane" data-p="arabo">${arb.map(iBlock).join("")}</div><div class="itext ipane" data-p="testo">${main.map(iBlock).join("")}</div><div class="itext ipane" data-p="traduzione">${trad.map(iBlock).join("")}</div><div class="ipages ipane" data-p="spartito" id="ivs"></div>`;
   h+=`<div class="inav">${prev?`<div class="ib2n" data-go="i-${prev.id}"><div class="k">${AR()?"‹ السابق":"‹ Precedente"}</div><div class="v">${esc(iTxt(prev))}</div></div>`:"<span></span>"}${next?`<div class="ib2n nx" data-go="i-${next.id}"><div class="k">${AR()?"التالي ›":"Successivo ›"}</div><div class="v">${esc(iTxt(next))}</div></div>`:"<span></span>"}</div>`;
   const lm=lastInni.startsWith("inni-")?IMENU[lastInni.slice(5)]:null;
-  h+=repBtn()+backBtns(lm?[lm.ar?"العودة إلى "+lm.ar:"العودة",`Torna a: ${lm.title}`]:["العودة إلى ترانيم وأناشيد القداس","Torna ai Canti e inni per la messa"],lastInni)+`</div>`;
+  h+=backBtns(lm?[lm.ar?"العودة إلى "+lm.ar:"العودة",`Torna a: ${lm.title}`]:["العودة إلى ترانيم وأناشيد القداس","Torna ai Canti e inni per la messa"],lastInni)+`</div>`;
   $("#main").innerHTML=h;window.scrollTo(0,0);
   const show=k=>{document.querySelectorAll(".ipane").forEach(p=>p.classList.toggle("hidden",p.dataset.p!==k));document.querySelectorAll("[data-iv]").forEach(x=>x.classList.toggle("on",x.dataset.iv===k));
     const vs=$("#ivs");if(k==="spartito"&&!vs.innerHTML){vs.innerHTML=c.pdfpages.map(p=>`<img alt="Pagina ${p-1}" src="inni/img/${p}.webp">`).join("");vs.querySelectorAll("img").forEach(im=>im.onerror=()=>{im.outerHTML=`<div class="imgerr">${AR()?"تعذّر تحميل النوتة. تحقّق من الاتصال بالإنترنت.":"Impossibile caricare lo spartito. Controlla la connessione."}</div>`})}};
@@ -838,7 +835,7 @@ function renderSong(s){
   if(S.tab==="trad") h+=`<div class="body ${sAr?"ltr":"rtl"} nochords">${bodyHTML(s.trad_ar,0,false)}</div>`;
   if(S.tab==="note") h+=`<div class="note">${esc(s.note_ar)}</div>`;
   const su=SUB[subOf(s)];
-  $("#main").innerHTML=h+repBtn()+(S.q?backBtns(["العودة إلى الترانيم","Torna ai canti"],"canti"):backBtns(["العودة إلى "+su.ar,"Torna a: "+su.it],"sec-"+su.id))+"</div>"; window.scrollTo(0,0);
+  $("#main").innerHTML=h+(S.q?backBtns(["العودة إلى الترانيم","Torna ai canti"],"canti"):backBtns(["العودة إلى "+su.ar,"Torna a: "+su.it],"sec-"+su.id))+"</div>"; window.scrollTo(0,0);
 }
 
 /* ---------- editor ---------- */
@@ -951,7 +948,6 @@ $("#main").onclick=e=>{
   const go=e.target.closest("[data-go]");if(go){if(go.dataset.go.startsWith("s-")&&route().inni)S.from=location.hash.slice(1);location.hash=go.dataset.go;return}
   const sc=e.target.closest("[data-sec]");if(sc){location.hash="sec-"+sc.dataset.sec;return}
   const it=e.target.closest(".item");if(it){if(it.classList.contains("plink")){const cur=location.hash.slice(3);const cp=PRAYERS.find(x=>x.id===cur);if(cp&&cp.grp==="ros")sessionStorage.setItem("rosBack",cur)}S.transpose=0;S.tab="text";location.hash="s-"+it.dataset.id;return}
-  if(e.target.closest("[data-rep]")){openReport("");return}
   const tb=e.target.closest("[data-tab]");if(tb){S.tab=tb.dataset.tab;render();return}
   const a=e.target.closest("[data-act]");if(!a)return;const id=route().song;const s=allSongs().find(x=>x.id===id);
   switch(a.dataset.act){
