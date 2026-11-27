@@ -1,5 +1,5 @@
 // Cache per l'uso senza connessione. Cambia VERSIONE a ogni aggiornamento.
-const VERSIONE = 'canti-v65';
+const VERSIONE = 'canti-v66';
 const FILES = ['./', './index.html', './canti.txt', './inni/inni.json', './inni/inni-arabo.txt', './manifest.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(VERSIONE).then(c => c.addAll(FILES)).then(() => self.skipWaiting()));
